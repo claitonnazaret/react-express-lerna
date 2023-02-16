@@ -1,0 +1,6 @@
+{
+    "recommendations": [
+        "kvcvc.sequelize-snippets",
+        "esbenp.prettier-vscode"
+    ]
+}

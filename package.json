@@ -1,0 +1,16 @@
+{
+  "name": "react-express-lerna",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "lint": "lerna run lint --stream",
+    "start": "lerna run start --stream"
+  },
+  "devDependencies": {
+    "lerna": "^6.5.1"
+  }
+}
