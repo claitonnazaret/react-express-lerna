@@ -22,7 +22,7 @@ module.exports = {
                     updatedAt: new Date(),
                 },
                 {
-                    roleName: 'Servico',
+                    roleName: 'Prestador',
                     active: true,
                     createdAt: new Date(),
                     updatedAt: new Date(),

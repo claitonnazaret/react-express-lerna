@@ -33,6 +33,10 @@ Role.init(
         roleName: {
             allowNull: true,
             type: DataTypes.STRING,
+            get(this: any) {
+                const name = this.getDataValue('roleName') as string;
+                return name.toUpperCase();
+            },
         },
         active: {
             allowNull: true,
