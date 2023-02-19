@@ -11,7 +11,7 @@ export const registerSchema = object({
         .nonempty('Você deve confirmar a senha')
         .min(8, 'Senha deve conter mais de 8 caracteres')
         .max(32, 'Senha deve conter no máximo 32 caracteress'),
-    roleId: number().gte(1, { message: 'Você deve informar o Tipo de cadastro' }),
+    roleId: string().nonempty('Você deve informar o Tipo de cadastro'),
 }).refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
     message: 'As senhas não coincidem',

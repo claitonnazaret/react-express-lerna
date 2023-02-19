@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Button, Grid, Link, Typography } from '@mui/material';
+import { Avatar, Button, Grid, Link, Typography, InputAdornment, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAuth } from '../../components/context/AuthProvider/useAuth';
@@ -11,7 +11,8 @@ import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
-import FormInput from '../../components/form/FormInput';
+import { FormInput } from '../../components/form';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
 function Copyright(props: any) {
     return (
@@ -30,10 +31,17 @@ const LoginPage = () => {
     const auth = useAuth();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
+    const [showPassword, setShowPassword] = useState(false);
 
     const methods = useForm<RegisterInput>({
         resolver: zodResolver(registerSchema),
     });
+
+    const handleShowPassword = () => setShowPassword((show) => !show);
+
+    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+    };
 
     const {
         reset,
@@ -109,9 +117,23 @@ const LoginPage = () => {
                             fullWidth
                             name="password"
                             label="Senha"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             id="password"
                             autoComplete="off"
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={handleShowPassword}
+                                            onMouseDown={handleMouseDownPassword}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
                         />
 
                         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
