@@ -9,12 +9,29 @@
     "preview": "npx vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@fontsource/roboto": "^4.5.8",
+    "@hookform/resolvers": "^2.9.11",
+    "@mui/icons-material": "^5.11.9",
+    "@mui/material": "^5.11.9",
+    "@mui/styled-engine-sc": "^5.11.9",
+    "@mui/x-date-pickers": "^5.0.19",
+    "lodash": "^4.17.21",
+    "notistack": "^2.0.8",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.1",
+    "react-hook-form-mui": "^5.14.0",
+    "react-router-dom": "^6.8.1",
+    "styled-components": "^5.3.6",
+    "zod": "^3.20.6"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
+    "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^3.1.0",
     "typescript": "^4.9.3",
     "vite": "^4.1.0"

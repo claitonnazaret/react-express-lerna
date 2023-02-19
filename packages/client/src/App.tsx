@@ -1,25 +1,37 @@
-import { useEffect, useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Dashboard, LoginPage, NotFoundPage } from './pages';
+import Protected from './components/Protected';
+import { SnackbarProvider } from 'notistack';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
-  const [foo, setFoo] = useState('N/A');
+    const snackConf = {
+        anchorOrigin: { vertical: 'top', horizontal: 'center' },
+        disableWindowBlurListener: true,
+    };
 
-  useEffect(() => {
-    fetch('http://localhost:5000/api')
-        .then((res) => res.json())
-        .then((data) => setFoo(data.foo))
-        .catch((err) => setFoo(err.message));
-  }, [])
-
-  return (
-    <div className="App">
-      <h1>Vite + React</h1>
-      <div className="card">
-        <h3>Server responded with foo:{foo}</h3> 
-      </div>
-    </div>
-  )
+    return (
+        <SnackbarProvider
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            disableWindowBlurListener={true}
+        >
+            <BrowserRouter>
+                <Routes>
+                    <Route
+                        path="/dashboard"
+                        element={
+                            <Protected>
+                                <Dashboard />
+                            </Protected>
+                        }
+                    ></Route>
+                    <Route path="/" element={<LoginPage />} />
+                    <Route path="/register" element={<RegisterPage />} />
+                    <Route path="*" element={<NotFoundPage />} />
+                </Routes>
+            </BrowserRouter>
+        </SnackbarProvider>
+    );
 }
 
-export default App
+export default App;
