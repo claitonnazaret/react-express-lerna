@@ -1,6 +1,6 @@
-import { TextField, TextFieldProps } from '@mui/material';
+import { TextFieldProps } from '@mui/material';
 import { FC } from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, useFormContext, TextFieldElement } from 'react-hook-form-mui';
 
 type IFormInputProps = {
     name: string;
@@ -18,11 +18,10 @@ const FormInput: FC<IFormInputProps> = ({ name, ...otherProps }) => {
             name={name}
             defaultValue=""
             render={({ field }) => (
-                <TextField
+                <TextFieldElement
                     {...otherProps}
                     {...field}
-                    error={!!errors[name]}
-                    helperText={errors[name] ? String(errors[name]?.message) : ''}
+                    parseError={(error) => (error ? String(errors[name]?.message) : '')}
                 />
             )}
         />
