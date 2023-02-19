@@ -133,8 +133,8 @@ const RegisterPage = () => {
                             id="email"
                             label="Email"
                             name="email"
+                            type="email"
                             autoComplete="off"
-                            autoFocus
                         />
                         <FormInput
                             margin="normal"
