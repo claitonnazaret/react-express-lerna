@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import {
     Avatar,
     Button,
+    FormControlLabel,
     Grid,
     Link,
+    Radio,
+    RadioGroup,
     TextField,
     Typography,
 } from '@mui/material';
@@ -23,12 +26,7 @@ import FormInput from '../../components/FormInput';
 
 function Copyright(props: any) {
     return (
-        <Typography
-            variant="body2"
-            color="text.secondary"
-            align="center"
-            {...props}
-        >
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
             <Link color="inherit" href="https://mui.com/">
                 Your Website
@@ -62,26 +60,16 @@ const LoginPage = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isSubmitSuccessful]);
 
-    const onSubmitHandler: SubmitHandler<RegisterInput> = ({
-        email,
-        password,
-    }) => {
+    const onSubmitHandler: SubmitHandler<RegisterInput> = ({ email, password }) => {
         auth.authenticated(email, password)
             .then(() => {
                 navigate('/dashboard');
             })
             .catch((error) => {
-                enqueueSnackbar(
-                    _.get(
-                        error,
-                        'response.data.error',
-                        'Internal server Error'
-                    ),
-                    {
-                        variant: 'error',
-                        autoHideDuration: 3000,
-                    }
-                );
+                enqueueSnackbar(_.get(error, 'response.data.error', 'Internal server Error'), {
+                    variant: 'error',
+                    autoHideDuration: 3000,
+                });
             });
     };
 
@@ -123,7 +111,7 @@ const LoginPage = () => {
                             id="email"
                             label="Email"
                             name="email"
-                            autoComplete="email"
+                            autoComplete="off"
                             autoFocus
                         />
                         <FormInput
@@ -131,29 +119,25 @@ const LoginPage = () => {
                             required
                             fullWidth
                             name="password"
-                            label="Password"
+                            label="Senha"
                             type="password"
                             id="password"
-                            autoComplete="current-password"
+                            autoComplete="off"
                         />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign In
+
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+                            Login
                         </Button>
 
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
-                                    Forgot password?
+                                    Esqueceu a senha?
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="#" variant="body2">
-                                    {"Don't have an account? Sign Up"}
+                                <Link href="/register" variant="body2">
+                                    {'Crie uma conta'}
                                 </Link>
                             </Grid>
                         </Grid>

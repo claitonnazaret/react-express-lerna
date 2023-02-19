@@ -1,11 +1,11 @@
-import { literal, object, string, TypeOf } from 'zod';
+import { object, string, TypeOf } from 'zod';
 
 export const registerSchema = object({
-    email: string().nonempty('Email is required').email('Email is invalid'),
+    email: string().nonempty('Email é obrigatório').email('Email inválido'),
     password: string()
-        .nonempty('Password is required')
-        .min(8, 'Password must be more than 8 characters')
-        .max(32, 'Password must be less than 32 characters'),
+        .nonempty('Senha é obrigatório')
+        .min(8, 'Senha deve conter mais de 8 caracteres')
+        .max(32, 'Senha deve conter no máximo 32 caracteress'),
 });
 
 export type RegisterInput = TypeOf<typeof registerSchema>;

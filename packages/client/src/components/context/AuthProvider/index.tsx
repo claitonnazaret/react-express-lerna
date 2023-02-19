@@ -6,14 +6,12 @@ export const AuthContext = createContext<IContext>({} as IContext);
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
     const [user, setUser] = useState<IUser | null>();
-    const [isSignedIn, setSignedIn] = useState<boolean>(false);
 
     useEffect(() => {
-        const user = getUserLocalStorage();
+        const userLocalStorage = getUserLocalStorage();
 
-        if (user) {
-            setUser(user);
-            setSignedIn(true);
+        if (userLocalStorage) {
+            setUser(userLocalStorage);
         }
     }, []);
 
@@ -21,9 +19,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
         await LoginRequest(email, password)
             .then((res: any) => {
                 const payload = { token: res.data.token, email };
-
                 setUser(payload);
-                setSignedIn(true);
                 setUserLocalStorage(payload);
             })
             .catch((err: any) => {
@@ -34,14 +30,14 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     const logout = () => {
         setUser(null);
         setUserLocalStorage(null);
-        setSignedIn(false);
+    };
+
+    const isSignedIn = (): boolean => {
+        const userLocalStorage = getUserLocalStorage();
+        return userLocalStorage != null;
     };
 
     return (
-        <AuthContext.Provider
-            value={{ ...user, authenticated, logout, isSignedIn }}
-        >
-            {children}
-        </AuthContext.Provider>
+        <AuthContext.Provider value={{ ...user, authenticated, logout, isSignedIn }}>{children}</AuthContext.Provider>
     );
 };

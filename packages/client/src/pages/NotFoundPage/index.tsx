@@ -7,8 +7,7 @@ export default function NotFoundPage() {
     const navigate = useNavigate();
 
     const goHome = () => {
-        alert(' Teste');
-        navigate(!auth.isSignedIn ? '/' : '/protected');
+        navigate(!auth.token ? '/' : '/protected');
     };
 
     return (
@@ -23,7 +22,7 @@ export default function NotFoundPage() {
             <Grid display="flex" alignItems="center" flexDirection="column">
                 <Typography variant="h1">404</Typography>
                 <Typography variant="h6">
-                    The page you’re looking for doesn’t exist. {auth.isSignedIn}
+                    <>The page you’re looking for doesn’t exist. {auth.isSignedIn}</>
                 </Typography>
                 <Button variant="contained" onClick={goHome}>
                     Back Home
