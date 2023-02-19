@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Avatar,
-    Button,
-    FormControlLabel,
-    Grid,
-    Link,
-    Radio,
-    RadioGroup,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Avatar, Button, Grid, Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAuth } from '../../components/context/AuthProvider/useAuth';
@@ -21,8 +11,7 @@ import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
-import { IUser } from '../../components/context/AuthProvider/types';
-import FormInput from '../../components/FormInput';
+import FormInput from '../../components/form/FormInput';
 
 function Copyright(props: any) {
     return (
