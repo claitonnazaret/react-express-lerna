@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Avatar,
     Button,
     Grid,
     Link,
     TextField,
-    Container,
     Typography,
-    Snackbar,
 } from '@mui/material';
 import { Box } from '@mui/system';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -15,6 +13,13 @@ import { useAuth } from '../../components/context/AuthProvider/useAuth';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import _ from 'lodash';
+
+import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { RegisterInput, registerSchema } from './util';
+import { IUser } from '../../components/context/AuthProvider/types';
+import FormInput from '../../components/FormInput';
 
 function Copyright(props: any) {
     return (
@@ -38,10 +43,29 @@ const LoginPage = () => {
     const auth = useAuth();
     const navigate = useNavigate();
     const { enqueueSnackbar } = useSnackbar();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
-    const handleLogin = async () => {
+    const methods = useForm<RegisterInput>({
+        resolver: zodResolver(registerSchema),
+    });
+
+    const {
+        reset,
+        handleSubmit,
+        register,
+        formState: { isSubmitSuccessful, errors },
+    } = methods;
+
+    useEffect(() => {
+        if (isSubmitSuccessful) {
+            reset();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isSubmitSuccessful]);
+
+    const onSubmitHandler: SubmitHandler<RegisterInput> = ({
+        email,
+        password,
+    }) => {
         auth.authenticated(email, password)
             .then(() => {
                 navigate('/dashboard');
@@ -56,7 +80,6 @@ const LoginPage = () => {
                     {
                         variant: 'error',
                         autoHideDuration: 3000,
-                        disableWindowBlurListener: true,
                     }
                 );
             });
@@ -84,57 +107,58 @@ const LoginPage = () => {
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    Login
                 </Typography>
-                <Box
-                    component="form"
-                    onSubmit={() => {}}
-                    noValidate
-                    sx={{ mt: 1 }}
-                >
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        onChange={(ev) => setEmail(ev.target.value)}
-                    />
-                    <TextField
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                        autoComplete="current-password"
-                        onChange={(ev) => setPassword(ev.target.value)}
-                    />
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}
-                        onClick={handleLogin}
+                <FormProvider {...methods}>
+                    <Box
+                        component="form"
+                        noValidate
+                        sx={{ mt: 1 }}
+                        onSubmit={handleSubmit(onSubmitHandler)}
                     >
-                        Sign In
-                    </Button>
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password?
-                            </Link>
+                        <FormInput
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email"
+                            name="email"
+                            autoComplete="email"
+                            autoFocus
+                        />
+                        <FormInput
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            autoComplete="current-password"
+                        />
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign In
+                        </Button>
+
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#" variant="body2">
+                                    Forgot password?
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="#" variant="body2">
+                                    {"Don't have an account? Sign Up"}
+                                </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                {"Don't have an account? Sign Up"}
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </Box>
+                    </Box>
+                </FormProvider>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
             </Box>
         </Box>
