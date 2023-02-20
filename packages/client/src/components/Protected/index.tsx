@@ -1,11 +1,14 @@
-import React from 'react';
-import { Login } from '@mui/icons-material';
+import { useLocation } from 'react-router-dom';
+import { LoginPage } from '../../pages';
 import { useAuth } from '../context/AuthProvider/useAuth';
-import { Navigate } from 'react-router-dom';
 
 function Protected({ children }: { children: JSX.Element }) {
-    let auth = useAuth();
+    const user = useAuth();
+    const location = useLocation();
 
-    return !auth.token ? <Navigate to="/" /> : children;
+    if (!user.accessToken) {
+        return <LoginPage />;
+    }
+    return children;
 }
 export default Protected;

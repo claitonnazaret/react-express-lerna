@@ -1,12 +1,13 @@
+import { AxiosResponse } from 'axios';
+
 export interface IUser {
     email?: string;
-    token?: string;
+    accessToken?: string;
 }
 
 export interface IContext extends IUser {
-    authenticated: (email: string, password: string) => Promise<void>;
-    logout: () => void;
-    isSignedIn: () => boolean;
+    authenticated: (email: string, password: string) => Promise<AxiosResponse>;
+    logout: () => Promise<AxiosResponse>;
 }
 
 export interface IAuthProvider {
