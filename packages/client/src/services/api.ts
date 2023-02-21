@@ -1,8 +1,7 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { IUser } from '../components/context/AuthProvider/types';
+import axios, { AxiosError } from 'axios';
 import _ from 'lodash';
 import { LocalStorage } from '../util/LocalStorage';
-import { redirect } from 'react-router-dom';
+import { IUser } from '../components/context/AuthProvider/types';
 
 const { VITE_SERVER_URL } = import.meta.env;
 
@@ -31,43 +30,44 @@ const Api = axios.create({
     headers: { 'content-type': 'application/json' },
 });
 
-Api.interceptors.request.use((request) => {
-    const userLocalStorage = LocalStorage.getUser();
-    if (userLocalStorage?.accessToken) {
-        request.headers.Authorization = `Bearer ${userLocalStorage?.accessToken}`;
-    }
-    // Este return é necessário para continuar a requisição para o endpoint.
-    return request;
-});
-
-Api.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async (error) => {
-        const originalRequest = error.config;
-
-        if (error?.response?.status === 401 && !originalRequest?.__isRetryRequest) {
-            originalRequest.retry = true;
-            const userLocalStorage = LocalStorage.getUser();
-            if (!userLocalStorage?.accessToken) {
-                LocalStorage.clear();
-                return (window.location.href = '/');
-            }
-
-            const resData = await Api.get(`${VITE_SERVER_URL}/api/user/refresh-token`, {
-                withCredentials: true,
-            });
-
-            const user: IUser = {
-                email: resData.data?.data?.email,
-                accessToken: resData.data?.data?.accessToken,
-            };
-            LocalStorage.setUser(user);
-
-            return Api(originalRequest);
+Api.interceptors.request.use(
+    (config) => {
+        const ls = LocalStorage.getUser();
+        if (ls?.accessToken) {
+            config.headers.Authorization = `Bearer ${ls?.accessToken}`;
         }
+        // Faz alguma coisa antes da requisição ser enviada
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
+// Adiciona um interceptador na resposta
+Api.interceptors.response.use(
+    (res) => res,
+    async (error) => {
+        const config = error.config;
+        if (error.response && error.response.status === 401 && !config._retry) {
+            config._retry = true;
+            try {
+                const resData = await axios.get(`${VITE_SERVER_URL}/api/user/refresh-token`, {
+                    withCredentials: true,
+                });
+                const response: IUser = {
+                    email: resData.data?.data?.email,
+                    accessToken: resData.data?.data?.accessToken,
+                };
+
+                config.headers.Authorization = `Bearer ${resData?.data?.data?.token}`;
+
+                LocalStorage.setUser(response);
+                return Api(config);
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        }
         return Promise.reject(error);
     }
 );

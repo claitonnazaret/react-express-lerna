@@ -1,15 +1,9 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Dashboard, LoginPage, NotFoundPage } from './pages';
+import { Routes, Route } from 'react-router-dom';
+import { Dashboard, LoginPage, NotFoundPage, RegisterPage } from './pages';
 import Protected from './components/Protected';
 import { SnackbarProvider } from 'notistack';
-import RegisterPage from './pages/RegisterPage';
 
 function App() {
-    const snackConf = {
-        anchorOrigin: { vertical: 'top', horizontal: 'center' },
-        disableWindowBlurListener: true,
-    };
-
     return (
         <SnackbarProvider
             anchorOrigin={{ vertical: 'top', horizontal: 'center' }}

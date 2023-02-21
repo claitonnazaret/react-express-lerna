@@ -76,8 +76,6 @@ const Dashboard = () => {
                                 <TableCell align="center">Código</TableCell>
                                 <TableCell>Nome</TableCell>
                                 <TableCell align="center">Ativo</TableCell>
-                                <TableCell align="center">Criado em</TableCell>
-                                <TableCell align="center">Atualizado em </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -91,12 +89,8 @@ const Dashboard = () => {
                                             {row.id}
                                         </TableCell>
                                         <TableCell>{row.roleName}</TableCell>
-                                        <TableCell align="center">{row.active}</TableCell>
                                         <TableCell align="center">
-                                            {row.createdAt.getDate()}
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            {row.updatedAt.getDate()}
+                                            {row.active ? 'Sim' : 'Não'}
                                         </TableCell>
                                     </TableRow>
                                 ))}
