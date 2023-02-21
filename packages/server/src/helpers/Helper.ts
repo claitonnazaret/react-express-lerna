@@ -15,10 +15,9 @@ interface UserData {
 const { JWT_TOKEN, JWT_REFRESH_TOKEN, JWT_TOKEN_TIMEOUT, JWT_REFRESH_TOKEN_TIMEOUT } = process.env;
 
 export default {
-    ResponseData: (status: number, message: string | undefined, error: any | null, data: any | null) => {
+    ResponseData: (message: string | undefined, error: any | null, data: any | null) => {
         if (error != null && error instanceof Error) {
             const response = {
-                status: status,
                 message: error.message,
                 errors: error,
                 data: null,
@@ -28,28 +27,29 @@ export default {
         }
 
         return {
-            status,
             message,
             errors: error,
             data: data,
         };
     },
     GenerateToken: (data: any): string => {
-        const token = jwt.sign(data, JWT_TOKEN as string, { expiresIn: JWT_TOKEN_TIMEOUT as string });
+        const accessToken = jwt.sign(data, JWT_TOKEN as string, { expiresIn: JWT_TOKEN_TIMEOUT as string });
 
-        return token;
+        return accessToken;
     },
     GenerateRefreshToken: (data: any): string => {
-        const token = jwt.sign(data, JWT_REFRESH_TOKEN as string, { expiresIn: JWT_REFRESH_TOKEN_TIMEOUT as string });
+        const accessToken = jwt.sign(data, JWT_REFRESH_TOKEN as string, {
+            expiresIn: JWT_REFRESH_TOKEN_TIMEOUT as string,
+        });
 
-        return token;
+        return accessToken;
     },
-    ExtractToken: (token: string): UserData | null => {
+    ExtractToken: (accessToken: string): UserData | null => {
         const secretKey: string = JWT_TOKEN as string;
 
         let resData: any;
 
-        const res = jwt.verify(token, secretKey, (err, decoded) => {
+        jwt.verify(accessToken, secretKey, (err, decoded) => {
             resData = err ? null : decoded;
         });
 
@@ -60,12 +60,12 @@ export default {
 
         return null;
     },
-    ExtractRefreshToken: (token: string): UserData | null => {
+    ExtractRefreshToken: (accessToken: string): UserData | null => {
         const secretKey: string = JWT_REFRESH_TOKEN as string;
 
         let resData: any;
 
-        const res = jwt.verify(token, secretKey, (err, decoded) => {
+        jwt.verify(accessToken, secretKey, (err, decoded) => {
             resData = err ? null : decoded;
         });
 

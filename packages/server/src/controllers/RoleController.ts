@@ -11,9 +11,9 @@ export default {
                 },
             });
 
-            return res.status(200).send(Helper.ResponseData(200, 'OK', undefined, roles));
+            return res.status(200).send(Helper.ResponseData('OK', undefined, roles));
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData(500, '', error, undefined));
+            return res.status(500).send(Helper.ResponseData('', error, undefined));
         }
     },
     create: async (req: Request, res: Response): Promise<Response> => {
@@ -25,9 +25,9 @@ export default {
                 active,
             });
 
-            return res.status(201).send(Helper.ResponseData(200, 'Created', undefined, create));
+            return res.status(201).send(Helper.ResponseData('Created', undefined, create));
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData(500, '', error, undefined));
+            return res.status(500).send(Helper.ResponseData('', error, undefined));
         }
     },
     update: async (req: Request, res: Response): Promise<Response> => {
@@ -38,11 +38,7 @@ export default {
             const role = await Role.findByPk(id);
 
             if (!role) {
-                return res.status(404).send({
-                    status: 404,
-                    message: 'Data Not found',
-                    data: null,
-                });
+                return res.status(404).send(Helper.ResponseData('Data Not found', undefined, null));
             }
 
             role.roleName = roleName;
@@ -50,9 +46,9 @@ export default {
 
             await role.save();
 
-            return res.status(200).send(Helper.ResponseData(200, 'OK', undefined, role));
+            return res.status(200).send(Helper.ResponseData('OK', undefined, role));
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData(500, '', error, undefined));
+            return res.status(500).send(Helper.ResponseData('', error, undefined));
         }
     },
     delete: async (req: Request, res: Response): Promise<Response> => {
@@ -62,18 +58,14 @@ export default {
             const role = await Role.findByPk(id);
 
             if (!role) {
-                return res.status(404).send({
-                    status: 404,
-                    message: 'Data Not found',
-                    data: null,
-                });
+                return res.status(404).send(Helper.ResponseData('Data Not found', undefined, null));
             }
 
             await role.destroy();
 
-            return res.status(200).send(Helper.ResponseData(204, 'No Content', undefined, undefined));
+            return res.status(200).send(Helper.ResponseData('No Content', undefined, undefined));
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData(500, '', error, undefined));
+            return res.status(500).send(Helper.ResponseData('', error, undefined));
         }
     },
     findById: async (req: Request, res: Response): Promise<Response> => {
@@ -82,16 +74,12 @@ export default {
             const role = await Role.findByPk(id);
 
             if (!role) {
-                return res.status(404).send({
-                    status: 404,
-                    message: 'Data Not found',
-                    data: null,
-                });
+                return res.status(404).send(Helper.ResponseData('Data Not found', undefined, null));
             }
 
-            return res.status(200).send(Helper.ResponseData(200, 'OK', undefined, role));
+            return res.status(200).send(Helper.ResponseData('OK', undefined, role));
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData(500, '', error, undefined));
+            return res.status(500).send(Helper.ResponseData('', error, undefined));
         }
     },
 };

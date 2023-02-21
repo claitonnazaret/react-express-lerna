@@ -16,14 +16,22 @@ const app = express();
 //use
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
 app.use(compression());
+
+app.use(
+    cors({
+        credentials: true,
+        origin: true,
+    })
+);
 
 //disabled
 app.disable('x-powered-by');
 
 app.get('/', (req: Request, res: Response) => {
-    return res.status(200).json({ foo: 'bar' });
+    return res.status(200).send({
+        response: 'Express TypeScript',
+    });
 });
 
 app.use(router);

@@ -6,13 +6,13 @@ const route = express.Router();
 
 route
     .route('/role')
-    .get(Authorization.Authenticated, Authorization.Cliente, RoleController.findAll)
-    .post(Authorization.Authenticated, Authorization.Prestador, RoleController.create);
+    .get(Authorization.Authenticated, Authorization.Admin, RoleController.findAll)
+    .post(Authorization.Authenticated, Authorization.Admin, RoleController.create);
 
 route
     .route('/role/:id')
-    .post(Authorization.Authenticated, Authorization.Prestador, RoleController.update)
+    .post(Authorization.Authenticated, Authorization.Admin, RoleController.update)
     .delete(Authorization.Authenticated, Authorization.Admin, RoleController.delete)
-    .get(Authorization.Authenticated, Authorization.Cliente, RoleController.findById);
+    .get(Authorization.Authenticated, Authorization.Admin, RoleController.findById);
 
 export default route;
