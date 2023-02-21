@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useState } from 'react';
 import { UserService } from '../../../services/user';
+import { IAuthProvider, IContext, IUser } from '../../../types';
 import { LocalStorage } from '../../../util/LocalStorage';
-import { IAuthProvider, IContext, IUser } from './types';
 
 export const AuthContext = createContext<IContext>({} as IContext);
 

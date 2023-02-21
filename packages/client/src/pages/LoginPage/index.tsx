@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Grid, Link, Typography, InputAdornment, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAuth } from '../../components/context/AuthProvider/useAuth';
 import { useSnackbar } from 'notistack';
 import { useLocation, useNavigate } from 'react-router-dom';
-import _, { replace } from 'lodash';
-
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
 import { FormInput } from '../../components/form';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { HandleError } from '../../services/api';
 import LoadingButton from '@mui/lab/LoadingButton';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import _ from 'lodash';
 
 function Copyright(props: any) {
     return (

@@ -1,30 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {
-    Avatar,
-    Button,
-    FormControl,
-    FormControlLabel,
-    FormLabel,
-    IconButton,
-    InputAdornment,
-    Link,
-    Radio,
-    RadioGroup,
-    Typography,
-} from '@mui/material';
+import { Avatar, IconButton, InputAdornment, Link, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAuth } from '../../components/context/AuthProvider/useAuth';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import _ from 'lodash';
-
-import { useForm, SubmitHandler, FormProvider, Controller, useFormContext } from 'react-hook-form';
-
+import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { FormInput, FormRadioGroup } from '../../components/form';
+import { UserService } from '../../services/user';
+import LoadingButton from '@mui/lab/LoadingButton';
+import _ from 'lodash';
 
 function Copyright(props: any) {
     return (
@@ -46,6 +34,7 @@ const RegisterPage = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loadingBtn, setLoadingBtn] = useState(false);
 
     const methods = useForm<RegisterInput>({
         resolver: zodResolver(registerSchema),
@@ -64,18 +53,31 @@ const RegisterPage = () => {
         }
     }, [isSubmitSuccessful]);
 
-    const onSubmitHandler: SubmitHandler<RegisterInput> = (values) => {
-        console.log(JSON.stringify(values));
-        // auth.authenticated(email, password)
-        //     .then(() => {
-        //         navigate('/login');
-        //     })
-        //     .catch((error) => {
-        //         enqueueSnackbar(_.get(error, 'response.data.error', 'Internal server Error'), {
-        //             variant: 'error',
-        //             autoHideDuration: 3000,
-        //         });
-        //     });
+    const onSubmitHandler: SubmitHandler<RegisterInput> = ({
+        name,
+        email,
+        password,
+        confirmPassword,
+        roleId,
+    }) => {
+        setLoadingBtn(true);
+        UserService.register({
+            name,
+            email,
+            password,
+            confirmPassword,
+            roleId,
+        })
+            .then(() => {
+                navigate('/');
+            })
+            .catch((error) => {
+                enqueueSnackbar(_.get(error, 'response.data.error', 'Internal server Error'), {
+                    variant: 'error',
+                    autoHideDuration: 3000,
+                });
+            })
+            .finally(() => setLoadingBtn(false));
     };
 
     const handleShowPassword = () => setShowPassword((show) => !show);
@@ -200,9 +202,16 @@ const RegisterPage = () => {
                             ]}
                         />
 
-                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            Registrar
-                        </Button>
+                        <LoadingButton
+                            type="submit"
+                            fullWidth
+                            loading={loadingBtn}
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            loadingPosition="end"
+                        >
+                            <span>Login</span>
+                        </LoadingButton>
                     </Box>
                 </FormProvider>
                 <Copyright sx={{ mt: 8, mb: 4 }} />

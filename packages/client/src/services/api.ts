@@ -1,16 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import _ from 'lodash';
+import { IUser } from '../types';
 import { LocalStorage } from '../util/LocalStorage';
-import { IUser } from '../components/context/AuthProvider/types';
 
 const { VITE_SERVER_URL } = import.meta.env;
-
-export interface IResponse {
-    status: number;
-    message: string | null;
-    errors: string | null;
-    data: any | any[] | null;
-}
 
 export const HandleError = (err: any): AxiosError => {
     if (axios.isAxiosError(err)) {
