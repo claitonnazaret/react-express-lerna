@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { Dashboard, LoginPage, NotFoundPage, RegisterPage } from './pages';
-import Protected from './components/Protected';
 import { SnackbarProvider } from 'notistack';
+import { ProtectedLayout } from './shared/layouts';
 
 function App() {
     return (
@@ -15,9 +15,9 @@ function App() {
                 <Route
                     path="/dashboard"
                     element={
-                        <Protected>
+                        <ProtectedLayout>
                             <Dashboard />
-                        </Protected>
+                        </ProtectedLayout>
                     }
                 ></Route>
                 <Route path="*" element={<NotFoundPage />} />

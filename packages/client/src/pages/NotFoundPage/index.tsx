@@ -1,13 +1,13 @@
 import { Box, Grid, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../components/context/AuthProvider/useAuth';
+import { useAuth } from '../../shared/hooks/useAuth';
 
 export default function NotFoundPage() {
     const auth = useAuth();
     const navigate = useNavigate();
 
     const goHome = () => {
-        navigate(!auth.token ? '/' : '/protected');
+        navigate(!auth.accessToken ? '/' : '/dashboard');
     };
 
     return (
@@ -22,7 +22,7 @@ export default function NotFoundPage() {
             <Grid display="flex" alignItems="center" flexDirection="column">
                 <Typography variant="h1">404</Typography>
                 <Typography variant="h6">
-                    <>The page you’re looking for doesn’t exist. {auth.isSignedIn}</>
+                    <>The page you’re looking for doesn’t exist.</>
                 </Typography>
                 <Button variant="contained" onClick={goHome}>
                     Back Home

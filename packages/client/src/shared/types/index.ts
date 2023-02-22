@@ -1,5 +1,14 @@
 import { AxiosResponse } from 'axios';
 
+// Types
+export type IRegister = {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    roleId: string;
+};
+
 // Interfaces
 export interface IUser {
     name?: string;
@@ -8,8 +17,9 @@ export interface IUser {
 }
 
 export interface IContext extends IUser {
-    authenticated: (email: string, password: string) => Promise<AxiosResponse>;
-    logout: () => Promise<AxiosResponse>;
+    login: (email: string, password: string) => Promise<void>;
+    register: (values: IRegister) => Promise<void>;
+    logout: () => Promise<void>;
 }
 
 export interface IAuthProvider {
@@ -22,12 +32,3 @@ export interface IResponse {
     errors: string | null;
     data: any | any[] | null;
 }
-
-// Types
-export type IRegister = {
-    name: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-    roleId: string;
-};

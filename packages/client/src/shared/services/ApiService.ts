@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import _ from 'lodash';
 import { IUser } from '../types';
-import { LocalStorage } from '../util/LocalStorage';
+import StorageService from './StorageService';
 
 const { VITE_SERVER_URL } = import.meta.env;
 
@@ -17,15 +17,15 @@ export const HandleError = (err: any): AxiosError => {
     } as AxiosError;
 };
 
-const Api = axios.create({
+const ApiService = axios.create({
     baseURL: `${VITE_SERVER_URL}/api`,
     timeout: 100000,
     headers: { 'content-type': 'application/json' },
 });
 
-Api.interceptors.request.use(
+ApiService.interceptors.request.use(
     (config) => {
-        const ls = LocalStorage.getUser();
+        const ls = StorageService.getUser();
         if (ls?.accessToken) {
             config.headers.Authorization = `Bearer ${ls?.accessToken}`;
         }
@@ -38,7 +38,7 @@ Api.interceptors.request.use(
 );
 
 // Adiciona um interceptador na resposta
-Api.interceptors.response.use(
+ApiService.interceptors.response.use(
     (res) => res,
     async (error) => {
         const config = error.config;
@@ -55,8 +55,8 @@ Api.interceptors.response.use(
 
                 config.headers.Authorization = `Bearer ${resData?.data?.data?.token}`;
 
-                LocalStorage.setUser(response);
-                return Api(config);
+                StorageService.setUser(response);
+                return ApiService(config);
             } catch (err) {
                 return Promise.reject(err);
             }
@@ -65,4 +65,4 @@ Api.interceptors.response.use(
     }
 );
 
-export default Api;
+export default ApiService;

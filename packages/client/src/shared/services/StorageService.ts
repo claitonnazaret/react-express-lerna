@@ -1,10 +1,10 @@
-import { IUser } from '../../components/context/AuthProvider/types';
-
 //export const KEY_ITEM = '';
+
+import { IUser } from '../types';
 
 const KEY_USER = import.meta.env.VITE_KEY_USER as string;
 
-export const LocalStorage = {
+const StorageService = {
     setUser: (user: IUser | null) => {
         if (!user) {
             localStorage.removeItem(KEY_USER);
@@ -45,3 +45,5 @@ export const LocalStorage = {
         localStorage.clear();
     },
 };
+
+export default StorageService;
