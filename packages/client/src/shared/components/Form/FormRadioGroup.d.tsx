@@ -3,14 +3,20 @@ import { FC } from 'react';
 import { Controller, useFormContext, RadioButtonGroup } from 'react-hook-form-mui';
 
 type IFormRadioGroup = {
-    label: string;
     name: string;
-    type: 'number' | 'string';
     options: any[];
+    type: 'number' | 'string';
+    label?: string;
 } & RadioGroupProps &
     FormControlProps;
 
-const FormInput: FC<IFormRadioGroup> = ({ name, type, options, ...otherProps }) => {
+const FormRadioGroup: FC<IFormRadioGroup> = ({
+    name,
+    options,
+    type = 'string',
+    label = '',
+    ...others
+}: IFormRadioGroup) => {
     const {
         control,
         formState: { errors },
@@ -24,9 +30,10 @@ const FormInput: FC<IFormRadioGroup> = ({ name, type, options, ...otherProps }) 
                 defaultValue=""
                 render={({ field }) => (
                     <RadioButtonGroup
+                        label={label}
                         type={type}
-                        {...otherProps}
                         {...field}
+                        {...others}
                         parseError={(error) => (error ? String(errors[name]?.message) : '')}
                         options={options}
                     />
@@ -36,4 +43,4 @@ const FormInput: FC<IFormRadioGroup> = ({ name, type, options, ...otherProps }) 
     );
 };
 
-export default FormInput;
+export default FormRadioGroup;

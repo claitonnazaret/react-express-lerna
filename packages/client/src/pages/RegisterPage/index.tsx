@@ -1,17 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, IconButton, InputAdornment, Link, Typography } from '@mui/material';
+import { Avatar, IconButton, InputAdornment, Link, Typography, Button } from '@mui/material';
 import { Box } from '@mui/system';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useAuth } from '../../components/context/AuthProvider/useAuth';
-import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../shared/hooks/useAuth';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { FormInput, FormRadioGroup } from '../../components/form';
-import { UserService } from '../../services/user';
-import LoadingButton from '@mui/lab/LoadingButton';
+import { FormInput, FormRadioGroup } from '../../shared/components';
 import _ from 'lodash';
 
 function Copyright(props: any) {
@@ -29,8 +25,6 @@ function Copyright(props: any) {
 
 const RegisterPage = () => {
     const auth = useAuth();
-    const navigate = useNavigate();
-    const { enqueueSnackbar } = useSnackbar();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -53,39 +47,24 @@ const RegisterPage = () => {
         }
     }, [isSubmitSuccessful]);
 
-    const onSubmitHandler: SubmitHandler<RegisterInput> = ({
+    const onSubmitHandler: SubmitHandler<RegisterInput> = async ({
         name,
         email,
         password,
         confirmPassword,
         roleId,
     }) => {
-        setLoadingBtn(true);
-        UserService.register({
+        await auth.register({
             name,
             email,
             password,
             confirmPassword,
             roleId,
-        })
-            .then(() => {
-                navigate('/');
-            })
-            .catch((error) => {
-                enqueueSnackbar(_.get(error, 'response.data.error', 'Internal server Error'), {
-                    variant: 'error',
-                    autoHideDuration: 3000,
-                });
-            })
-            .finally(() => setLoadingBtn(false));
+        });
     };
 
     const handleShowPassword = () => setShowPassword((show) => !show);
     const handleShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
-
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
 
     return (
         <Box
@@ -153,7 +132,7 @@ const RegisterPage = () => {
                                         <IconButton
                                             aria-label="toggle password visibility"
                                             onClick={handleShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
+                                            onMouseDown={(ev) => ev.preventDefault()}
                                             edge="end"
                                         >
                                             {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -177,7 +156,7 @@ const RegisterPage = () => {
                                         <IconButton
                                             aria-label="toggle password visibility"
                                             onClick={handleShowConfirmPassword}
-                                            onMouseDown={handleMouseDownPassword}
+                                            onMouseDown={(ev) => ev.preventDefault()}
                                             edge="end"
                                         >
                                             {showConfirmPassword ? (
@@ -202,16 +181,9 @@ const RegisterPage = () => {
                             ]}
                         />
 
-                        <LoadingButton
-                            type="submit"
-                            fullWidth
-                            loading={loadingBtn}
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            loadingPosition="end"
-                        >
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                             <span>Login</span>
-                        </LoadingButton>
+                        </Button>
                     </Box>
                 </FormProvider>
                 <Copyright sx={{ mt: 8, mb: 4 }} />

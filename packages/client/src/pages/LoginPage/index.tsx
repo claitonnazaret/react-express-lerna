@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Grid, Link, Typography, InputAdornment, IconButton } from '@mui/material';
+import { Avatar, Grid, Link, Typography, InputAdornment, IconButton, Button } from '@mui/material';
 import { Box } from '@mui/system';
-import { useAuth } from '../../components/context/AuthProvider/useAuth';
+import { useAuth } from '../../shared/hooks/useAuth';
 import { useSnackbar } from 'notistack';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
-import { FormInput } from '../../components/form';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { HandleError } from '../../services/api';
 import LoadingButton from '@mui/lab/LoadingButton';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { FormInput } from '../../shared/components';
 import _ from 'lodash';
 
 function Copyright(props: any) {
@@ -29,17 +28,10 @@ function Copyright(props: any) {
 
 const LoginPage = () => {
     const auth = useAuth();
-    const navigate = useNavigate();
-    const location = useLocation();
-    const { enqueueSnackbar } = useSnackbar();
     const [showPassword, setShowPassword] = useState(false);
     const [loadingBtn, setLoadingBtn] = useState(false);
 
     const handleShowPassword = () => setShowPassword((show) => !show);
-
-    const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault();
-    };
 
     const methods = useForm<RegisterInput>({
         resolver: zodResolver(registerSchema),
@@ -57,34 +49,13 @@ const LoginPage = () => {
     } = methods;
 
     useEffect(() => {
-        // if (isSubmitSuccessful) {
-        //     reset();
-        // }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        if (isSubmitSuccessful) {
+            reset();
+        }
     }, [isSubmitSuccessful]);
 
     const onSubmitHandler: SubmitHandler<RegisterInput> = async ({ email, password }) => {
-        setLoadingBtn(true);
-        await auth
-            .authenticated(email, password)
-            .then((res: any) => {
-                navigate('/dashboard');
-            })
-            .catch((error: any) => {
-                const err = HandleError(error);
-                enqueueSnackbar(
-                    _.get(err, 'response.status', 500) == 401
-                        ? 'Email / Senha inválidos'
-                        : err.message,
-                    {
-                        variant: 'error',
-                        autoHideDuration: 3000,
-                    }
-                );
-            })
-            .finally(() => {
-                setLoadingBtn(false);
-            });
+        await auth.login(email, password);
     };
 
     return (
@@ -143,7 +114,7 @@ const LoginPage = () => {
                                         <IconButton
                                             aria-label="toggle password visibility"
                                             onClick={handleShowPassword}
-                                            onMouseDown={handleMouseDownPassword}
+                                            onMouseDown={(ev) => ev.preventDefault()}
                                             edge="end"
                                         >
                                             {showPassword ? <VisibilityOff /> : <Visibility />}
@@ -153,16 +124,9 @@ const LoginPage = () => {
                             }}
                         />
 
-                        <LoadingButton
-                            type="submit"
-                            fullWidth
-                            loading={loadingBtn}
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                            loadingPosition="end"
-                        >
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
                             <span>Login</span>
-                        </LoadingButton>
+                        </Button>
 
                         <Grid container>
                             <Grid item xs>
@@ -176,11 +140,6 @@ const LoginPage = () => {
                                 </Link>
                             </Grid>
                         </Grid>
-
-                        <pre>{JSON.stringify(auth.email, null, 2)}</pre>
-
-                        <pre>{JSON.stringify(import.meta.env.VITE_SERVER_URL, null, 2)}</pre>
-                        <pre>{JSON.stringify(import.meta.env.VITE_KEY_USER, null, 2)}</pre>
                     </Box>
                 </FormProvider>
                 <Copyright sx={{ mt: 8, mb: 4 }} />
