@@ -13,20 +13,48 @@ import {
     ListItemIcon,
     ListItemText,
     Toolbar,
-    Typography,
     useMediaQuery,
     useTheme,
 } from '@mui/material';
 import Logo from '../../../assets/react.svg';
 import { ReactNode } from 'react';
 import { useDrawer } from '../../hooks/useDrawer';
+import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom';
 
 interface ILeftMenu {
     children: ReactNode;
 }
+
+interface IListItemLink {
+    to: string;
+    icon: string;
+    label: string;
+    onClick: (() => void) | undefined;
+}
+
+const ListItemLink: React.FC<IListItemLink> = ({ to, icon, label, onClick }) => {
+    const navigate = useNavigate();
+    const resolverPath = useResolvedPath(to);
+    const match = useMatch({ path: resolverPath.pathname, end: false });
+
+    const handleClick = () => {
+        navigate(to);
+        onClick?.();
+    };
+
+    return (
+        <ListItemButton selected={!!match} onClick={handleClick}>
+            <ListItemIcon>
+                <Icon>{icon}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={label} />
+        </ListItemButton>
+    );
+};
+
 const LeftMenu: React.FC<ILeftMenu> = ({ children }) => {
     const theme = useTheme();
-    const { isOpen, toogleOpen } = useDrawer();
+    const { isOpen, toogleOpen, drawerOptions } = useDrawer();
     const mq = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
@@ -49,12 +77,15 @@ const LeftMenu: React.FC<ILeftMenu> = ({ children }) => {
                 <Divider />
                 <Box flex={1}>
                     <List component="nav">
-                        <ListItemButton>
-                            <ListItemIcon>
-                                <Icon>dashboard</Icon>
-                            </ListItemIcon>
-                            <ListItemText primary="Dashboard" />
-                        </ListItemButton>
+                        {drawerOptions.map((option) => (
+                            <ListItemLink
+                                key={option.path}
+                                icon={option.icon}
+                                to={option.path}
+                                label={option.label}
+                                onClick={toogleOpen}
+                            />
+                        ))}
                     </List>
                 </Box>
             </Drawer>
