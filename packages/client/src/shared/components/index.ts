@@ -1,2 +1,3 @@
-export { default as FormInput } from './Form/FormInput.d';
-export { default as FormRadioGroup } from './Form/FormRadioGroup.d';
+export { default as FormInput } from './form/FormInput';
+export { default as FormRadioGroup } from './form/FormRadioGroup';
+export { default as LeftMenu } from './left-menu/LeftMenu';

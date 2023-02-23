@@ -16,7 +16,6 @@
     "@mui/icons-material": "^5.11.9",
     "@mui/lab": "^5.0.0-alpha.120",
     "@mui/material": "^5.11.9",
-    "@mui/styled-engine-sc": "^5.11.9",
     "@mui/x-date-pickers": "^5.0.19",
     "lodash": "^4.17.21",
     "notistack": "^2.0.8",
@@ -25,7 +24,6 @@
     "react-hook-form": "^7.43.1",
     "react-hook-form-mui": "^5.14.0",
     "react-router-dom": "^6.8.1",
-    "styled-components": "^5.3.6",
     "zod": "^3.20.6"
   },
   "devDependencies": {

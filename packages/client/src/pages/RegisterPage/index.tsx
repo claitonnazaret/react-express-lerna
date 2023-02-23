@@ -7,8 +7,8 @@ import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { FormInput, FormRadioGroup } from '../../shared/components';
 import _ from 'lodash';
+import { FormInput, FormRadioGroup } from '../../shared/components';
 
 function Copyright(props: any) {
     return (
