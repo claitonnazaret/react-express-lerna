@@ -1,20 +1,18 @@
 import { Box, Button } from '@mui/material';
 import AppRoutes from '../../routes';
-import { LeftMenu } from '../../shared/components';
 import { useDrawer } from '../../shared/contexts/hooks';
+import { SideBar } from '../components';
 
-const MainPage = () => {
+export const MainLayout = () => {
     const { toogleOpen } = useDrawer();
     return (
         <>
-            <LeftMenu>
+            <SideBar>
                 <Button onClick={toogleOpen}>Open</Button>
                 <Box sx={{ backgroundColor: 'red', width: '500px', height: '500px' }}>
                     <AppRoutes />
                 </Box>
-            </LeftMenu>
+            </SideBar>
         </>
     );
 };
-
-export default MainPage;

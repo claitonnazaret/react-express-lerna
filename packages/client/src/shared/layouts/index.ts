@@ -1,1 +1,2 @@
-export { default as ProtectedLayout } from './ProtectedLayout.d';
+export * from './AuthLayout';
+export * from './MainLayout';

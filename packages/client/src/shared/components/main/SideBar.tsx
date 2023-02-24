@@ -79,7 +79,7 @@ const ListItemLink: React.FC<IDrawerOptionListItem> = ({
     );
 };
 
-const LeftMenu: React.FC<ILeftMenu> = ({ children }) => {
+export const SideBar: React.FC<ILeftMenu> = ({ children }) => {
     const theme = useTheme();
     const { isOpen, toogleOpen, drawerOptions } = useDrawer();
     const mq = useMediaQuery(theme.breakpoints.down('sm'));
@@ -124,5 +124,3 @@ const LeftMenu: React.FC<ILeftMenu> = ({ children }) => {
         </Box>
     );
 };
-
-export default LeftMenu;
