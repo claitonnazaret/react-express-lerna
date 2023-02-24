@@ -1,5 +1,5 @@
 import { LoginPage } from '../../pages';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../contexts/hooks';
 
 const ProtectedLayout = ({ children }: { children: JSX.Element }) => {
     const user = useAuth();

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { IDrawerOptionListItem } from '../shared/contexts';
 import { mainRoutes } from './routes';
-import { useDrawer } from '../shared/hooks';
+import { useDrawer } from '../shared/contexts/hooks';
 import uuid from 'react-uuid';
 import _ from 'lodash';
 

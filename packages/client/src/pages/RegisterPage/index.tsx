@@ -6,9 +6,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { FormInput, FormRadioGroup } from '../../shared/components';
-import { useAuth } from '../../shared/hooks';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import _ from 'lodash';
+import { useAuth } from '../../shared/contexts/hooks';
 
 function Copyright(props: any) {
     return (

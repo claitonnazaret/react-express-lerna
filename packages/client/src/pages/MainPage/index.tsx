@@ -1,13 +1,9 @@
 import { Box, Button } from '@mui/material';
 import AppRoutes from '../../routes';
-import { useNavigate } from 'react-router-dom';
 import { LeftMenu } from '../../shared/components';
-import { useDrawer, useAppTheme, useAuth } from '../../shared/hooks';
+import { useDrawer } from '../../shared/contexts/hooks';
 
 const MainPage = () => {
-    const auth = useAuth();
-    const navigate = useNavigate();
-    const theme = useAppTheme();
     const { toogleOpen } = useDrawer();
     return (
         <>
