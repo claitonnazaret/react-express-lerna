@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, IconButton, InputAdornment, Link, Typography, Button } from '@mui/material';
 import { Box } from '@mui/system';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { useAuth } from '../../shared/hooks/useAuth';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterInput, registerSchema } from './util';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import _ from 'lodash';
 import { FormInput, FormRadioGroup } from '../../shared/components';
+import { useAuth } from '../../shared/hooks';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import _ from 'lodash';
 
 function Copyright(props: any) {
     return (
@@ -28,7 +28,6 @@ const RegisterPage = () => {
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-    const [loadingBtn, setLoadingBtn] = useState(false);
 
     const methods = useForm<RegisterInput>({
         resolver: zodResolver(registerSchema),

@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
             .then((res) => {
                 setUser(res.data.data);
                 StorageService.setUser(res.data.data);
-                navigate('/dashboard');
+                navigate('/main');
             })
             .catch((err) => {
                 console.error(err);

@@ -4,7 +4,7 @@ import { DarkTheme, LightTheme } from '../themes';
 
 interface IThemeContext {
     themeName: 'light' | 'dark';
-    toogle: () => void;
+    toogleTheme: () => void;
 }
 
 interface IThemeProvider {
@@ -16,7 +16,7 @@ export const AppThemeContext = createContext({} as IThemeContext);
 export const AppThemeProvider: React.FC<IThemeProvider> = ({ children }: IThemeProvider) => {
     const [themeName, setTheme] = useState<'light' | 'dark'>('light');
 
-    const toogle = useCallback(() => {
+    const toogleTheme = useCallback(() => {
         setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
     }, []);
 
@@ -25,7 +25,7 @@ export const AppThemeProvider: React.FC<IThemeProvider> = ({ children }: IThemeP
     }, [themeName]);
 
     return (
-        <AppThemeContext.Provider value={{ themeName, toogle }}>
+        <AppThemeContext.Provider value={{ themeName, toogleTheme }}>
             <ThemeProvider theme={theme}>
                 <Box width="100vw" height="100vh" bgcolor={theme.palette.background.default}>
                     {children}
