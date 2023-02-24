@@ -16,8 +16,7 @@ function App() {
                     <BrowserRouter>
                         <AuthProvider>
                             <Routes>
-                                <Route path="/*" element={<MainPage />} />
-                                {/* <Route path="/login" element={<LoginPage />} />
+                                <Route path="/login" element={<LoginPage />} />
                                 <Route path="/register" element={<RegisterPage />} />
                                 <Route
                                     path="/*"
@@ -26,8 +25,8 @@ function App() {
                                             <MainPage />
                                         </ProtectedLayout>
                                     }
-                                /> */}
-                                {/* <Route path="*" element={<Navigate to="login" />} /> */}
+                                />
+                                <Route path="*" element={<Navigate to="login" />} />
                             </Routes>
                         </AuthProvider>
                     </BrowserRouter>
