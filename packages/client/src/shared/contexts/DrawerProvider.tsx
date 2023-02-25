@@ -1,18 +1,24 @@
-import { ButtonBaseProps, ListItemButtonBaseProps } from '@mui/material';
+import { ListItemButtonBaseProps } from '@mui/material';
 import { createContext, ReactNode, useCallback, useState } from 'react';
 
 export interface IDrawerOptionListItem extends Omit<ListItemButtonBaseProps, 'children'> {
-    path: string | null;
+    path?: string;
     label: string;
     icon: string;
-    element: ReactNode | undefined;
     onClick?: (() => void) | undefined;
     children?: IDrawerOptionListItem[] | undefined;
 }
 
+interface IAppInfo {
+    titulo: string;
+    iconProfile: string;
+}
+
 interface IDrawerContext {
-    drawWidth: number;
+    appInfo: IAppInfo;
+    setAppInfo: (info: IAppInfo) => void;
     isOpen: boolean;
+    setOpen: (isOpen: boolean) => void;
     toogleOpen: () => void;
     drawerOptions: IDrawerOptionListItem[];
     setDrawerOptions: (newDrawerOptions: IDrawerOptionListItem[]) => void;
@@ -25,7 +31,7 @@ interface IDrawerProvider {
 export const DrawerContext = createContext({} as IDrawerContext);
 
 export const DrawerProvider: React.FC<IDrawerProvider> = ({ children }: IDrawerProvider) => {
-    const drawWidth = import.meta.env.VITE_DRAWER_WIDTH;
+    const [appInfo, setAppInfo] = useState({} as IAppInfo);
     const [isOpen, setOpen] = useState(true);
     const [drawerOptions, setDrawerOptions] = useState<IDrawerOptionListItem[]>([]);
 
@@ -40,8 +46,10 @@ export const DrawerProvider: React.FC<IDrawerProvider> = ({ children }: IDrawerP
     return (
         <DrawerContext.Provider
             value={{
-                drawWidth,
+                appInfo,
+                setAppInfo,
                 isOpen,
+                setOpen,
                 toogleOpen,
                 drawerOptions,
                 setDrawerOptions: handleSetDrawerOptions,
