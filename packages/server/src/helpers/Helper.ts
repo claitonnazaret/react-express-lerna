@@ -15,23 +15,6 @@ interface UserData {
 const { JWT_TOKEN, JWT_REFRESH_TOKEN, JWT_TOKEN_TIMEOUT, JWT_REFRESH_TOKEN_TIMEOUT } = process.env;
 
 export default {
-    ResponseData: (message: string | undefined, error: any | null, data: any | null) => {
-        if (error != null && error instanceof Error) {
-            const response = {
-                message: error.message,
-                errors: error,
-                data: null,
-            };
-
-            return response;
-        }
-
-        return {
-            message,
-            errors: error,
-            data: data,
-        };
-    },
     GenerateToken: (data: any): string => {
         const accessToken = jwt.sign(data, JWT_TOKEN as string, { expiresIn: JWT_TOKEN_TIMEOUT as string });
 
