@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { IAuthProvider, IContext, IRegister, IUser } from '../../types';
-import { StorageService, UserService } from '../../services';
+import { IAuthProvider, IContext, IRegister, IUser } from '../types';
+import { StorageService, UserService } from '../services';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 export const AuthContext = createContext<IContext>({} as IContext);

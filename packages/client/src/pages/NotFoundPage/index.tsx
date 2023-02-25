@@ -1,6 +1,6 @@
 import { Box, Grid, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../shared/hooks/useAuth';
+import { useAuth } from '../../shared/contexts/hooks';
 
 export default function NotFoundPage() {
     const auth = useAuth();
