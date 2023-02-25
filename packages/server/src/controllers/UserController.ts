@@ -19,9 +19,9 @@ export default {
                 verified: true,
                 roleId: roleId,
             });
-            return res.status(201).send(Helper.ResponseData('Created', undefined, user));
+            return res.status(201).send(user);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     login: async (req: Request, res: Response): Promise<Response> => {
@@ -35,12 +35,12 @@ export default {
             });
 
             if (!user) {
-                return res.status(401).send(Helper.ResponseData('Unauthorized', undefined, undefined));
+                return res.status(401).send('Unauthorized');
             }
 
             const matched = await PasswordHelper.PasswordCompare(password, user.password);
             if (!matched) {
-                return res.status(401).send(Helper.ResponseData('Unauthorized', undefined, undefined));
+                return res.status(401).send('Unauthorized');
             }
 
             const dataUser = {
@@ -69,9 +69,9 @@ export default {
                 active: user.active,
                 accessToken: accessToken,
             };
-            return res.status(200).send(Helper.ResponseData('OK', undefined, responseUser));
+            return res.status(200).send(responseUser);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     refreshToken: async (req: Request, res: Response): Promise<Response> => {
@@ -79,14 +79,12 @@ export default {
             const refreshToken = req.cookies?.refreshToken;
 
             if (!refreshToken) {
-                return res.status(401).send(Helper.ResponseData('Unauthorized refreshToken', undefined, undefined));
+                return res.status(401).send('Unauthorized');
             }
 
             const decodedUser = Helper.ExtractRefreshToken(refreshToken);
             if (!decodedUser) {
-                return res
-                    .status(401)
-                    .send(Helper.ResponseData('Unauthorized decodedUser', ['REFRESH_TOKEN_TIMEOUT'], undefined));
+                return res.status(401).send('Unauthorized decodedUser');
             }
 
             const accessToken = Helper.GenerateToken({
@@ -106,9 +104,9 @@ export default {
                 accessToken: accessToken,
             };
 
-            return res.status(200).send(Helper.ResponseData('OK', undefined, resultUser));
+            return res.status(200).send(resultUser);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     userDetail: async (req: Request, res: Response): Promise<Response> => {
@@ -125,22 +123,22 @@ export default {
             });
 
             if (!user) {
-                return res.status(404).send(Helper.ResponseData('User not found', undefined, undefined));
+                return res.status(404).send('User not found');
             }
 
             user.password = '';
             user.accessToken = '';
 
-            return res.status(200).send(Helper.ResponseData('OK', undefined, user));
+            return res.status(200).send(user);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     logout: async (req: Request, res: Response): Promise<Response> => {
         try {
             const refreshToken = req.cookies?.refreshToken;
             if (!refreshToken) {
-                return res.status(200).send(Helper.ResponseData('User Logout', undefined, undefined));
+                return res.status(204).send('User Logout');
             }
 
             const email = res.locals.userEmail;
@@ -152,15 +150,15 @@ export default {
 
             if (!user) {
                 res.clearCookie('refreshToken');
-                return res.status(200).send(Helper.ResponseData('User not found', undefined, undefined));
+                return res.status(404).send('User not found');
             }
 
             await User.update({ accessToken: null }, { where: { email: email } });
             res.clearCookie('refreshToken');
 
-            return res.status(200).send(Helper.ResponseData('User Logout', undefined, undefined));
+            return res.status(204).send('User Logout');
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
 };

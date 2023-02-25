@@ -5,7 +5,7 @@ import StorageService from './StorageService';
 
 const { VITE_SERVER_URL } = import.meta.env;
 
-export const HandleError = (err: any): AxiosError => {
+const HandleError = (err: any): AxiosError => {
     if (axios.isAxiosError(err)) {
         return err as AxiosError;
     }
@@ -33,7 +33,7 @@ ApiService.interceptors.request.use(
         return config;
     },
     (error) => {
-        return Promise.reject(error);
+        return Promise.reject(HandleError(error));
     }
 );
 
@@ -49,19 +49,19 @@ ApiService.interceptors.response.use(
                     withCredentials: true,
                 });
                 const response: IUser = {
-                    email: resData.data?.data?.email,
-                    accessToken: resData.data?.data?.accessToken,
+                    email: resData.data?.email,
+                    accessToken: resData.data?.accessToken,
                 };
 
-                config.headers.Authorization = `Bearer ${resData?.data?.data?.token}`;
+                config.headers.Authorization = `Bearer ${resData?.data?.token}`;
 
                 StorageService.setUser(response);
                 return ApiService(config);
             } catch (err) {
-                return Promise.reject(err);
+                return Promise.reject(HandleError(err));
             }
         }
-        return Promise.reject(error);
+        return Promise.reject(HandleError(error));
     }
 );
 

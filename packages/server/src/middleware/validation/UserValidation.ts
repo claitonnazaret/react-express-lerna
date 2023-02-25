@@ -1,6 +1,5 @@
 import Validator from 'validatorjs';
 import { Request, Response, NextFunction } from 'express';
-import Helper from '../../helpers/Helper';
 import User from '../../db/models/User';
 
 const RegisterValidation = async (req: Request, res: Response, next: NextFunction) => {
@@ -24,7 +23,7 @@ const RegisterValidation = async (req: Request, res: Response, next: NextFunctio
         const validate = new Validator(data, rules);
 
         if (validate.fails()) {
-            return res.status(400).send(Helper.ResponseData('Bad Request', validate.errors, null));
+            return res.status(400).send(validate.errors);
         }
 
         const user = await User.findOne({
@@ -34,15 +33,12 @@ const RegisterValidation = async (req: Request, res: Response, next: NextFunctio
         });
 
         if (user) {
-            const errorData = {
-                email: ['Email já cadastrado!'],
-            };
-            return res.status(400).send(Helper.ResponseData('Bad Request', errorData, undefined));
+            return res.status(400).send('Email já cadastrado!');
         }
 
         next();
     } catch (error) {
-        return res.status(500).send(Helper.ResponseData('', error, null));
+        return res.status(500).send(error);
     }
 };
 

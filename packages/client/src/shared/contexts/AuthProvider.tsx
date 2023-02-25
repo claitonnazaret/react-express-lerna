@@ -3,12 +3,14 @@ import { IAuthProvider, IContext, IRegister, IUser } from '../types';
 import { StorageService, UserService } from '../services';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
+import { AxiosError } from 'axios';
+
 export const AuthContext = createContext<IContext>({} as IContext);
 
 export const AuthProvider = ({ children }: IAuthProvider) => {
     const [user, setUser] = useState<IUser | null>();
     const navigate = useNavigate();
-    const enqueueSnackbar = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
         const userLS = StorageService.getUser();
@@ -21,12 +23,16 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
     const login = async (email: string, password: string) => {
         await UserService.login(email, password)
             .then((res) => {
-                setUser(res.data.data);
-                StorageService.setUser(res.data.data);
+                const { data } = res;
+                setUser(data);
+                StorageService.setUser(data);
                 navigate('/dashboard');
             })
-            .catch((err) => {
-                console.error(err);
+            .catch((err: AxiosError) => {
+                enqueueSnackbar(
+                    err.response?.status == 401 ? 'Email/Senha inválidos' : err.message,
+                    { variant: 'error' }
+                );
             })
             .finally(() => {});
     };
@@ -36,8 +42,8 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
             .then((res) => {
                 navigate('/');
             })
-            .catch((err) => {
-                console.error(err);
+            .catch((err: AxiosError) => {
+                enqueueSnackbar(err.message, { variant: 'error' });
             })
             .finally(() => {});
     };
@@ -49,8 +55,8 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
                 StorageService.removeUser();
                 navigate('/');
             })
-            .catch((err) => {
-                console.error(err);
+            .catch((err: AxiosError) => {
+                enqueueSnackbar(err.message, { variant: 'error' });
             })
             .finally(() => {});
     };

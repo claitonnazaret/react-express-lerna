@@ -11,9 +11,9 @@ export default {
                 },
             });
 
-            return res.status(200).send(Helper.ResponseData('OK', undefined, roles));
+            return res.status(200).send(roles);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     create: async (req: Request, res: Response): Promise<Response> => {
@@ -25,9 +25,9 @@ export default {
                 active,
             });
 
-            return res.status(201).send(Helper.ResponseData('Created', undefined, create));
+            return res.status(201).send(create);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     update: async (req: Request, res: Response): Promise<Response> => {
@@ -38,7 +38,7 @@ export default {
             const role = await Role.findByPk(id);
 
             if (!role) {
-                return res.status(404).send(Helper.ResponseData('Data Not found', undefined, null));
+                return res.status(404).send('Data Not found');
             }
 
             role.roleName = roleName;
@@ -46,9 +46,9 @@ export default {
 
             await role.save();
 
-            return res.status(200).send(Helper.ResponseData('OK', undefined, role));
+            return res.status(200).send(role);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     delete: async (req: Request, res: Response): Promise<Response> => {
@@ -58,14 +58,14 @@ export default {
             const role = await Role.findByPk(id);
 
             if (!role) {
-                return res.status(404).send(Helper.ResponseData('Data Not found', undefined, null));
+                return res.status(404).send('Data Not found');
             }
 
             await role.destroy();
 
-            return res.status(200).send(Helper.ResponseData('No Content', undefined, undefined));
+            return res.status(204);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
     findById: async (req: Request, res: Response): Promise<Response> => {
@@ -74,12 +74,12 @@ export default {
             const role = await Role.findByPk(id);
 
             if (!role) {
-                return res.status(404).send(Helper.ResponseData('Data Not found', undefined, null));
+                return res.status(404).send('Data Not found');
             }
 
-            return res.status(200).send(Helper.ResponseData('OK', undefined, role));
+            return res.status(200).send(role);
         } catch (error: any) {
-            return res.status(500).send(Helper.ResponseData('', error, undefined));
+            return res.status(500).send(error);
         }
     },
 };
