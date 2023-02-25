@@ -11,7 +11,7 @@ route
 
 route
     .route('/role/:id')
-    .post(Authorization.Authenticated, Authorization.Admin, RoleController.update)
+    .put(Authorization.Authenticated, Authorization.Admin, RoleController.update)
     .delete(Authorization.Authenticated, Authorization.Admin, RoleController.delete)
     .get(Authorization.Authenticated, Authorization.Admin, RoleController.findById);
 

@@ -1,10 +1,9 @@
-import { Box, Button } from '@mui/material';
 import { useEffect } from 'react';
-import AppRoutes from '../../routes';
 import { useDrawer } from '../../shared/contexts/hooks';
 import { SideBar } from '../components';
 import { PageLayout } from './PageLayout';
 import Logo from '../../assets/react.svg';
+import AppRoutes from '../../routes';
 
 export const MainLayout = () => {
     const { toogleOpen, setAppInfo } = useDrawer();
@@ -18,9 +17,7 @@ export const MainLayout = () => {
     return (
         <>
             <SideBar>
-                <PageLayout>
-                    <AppRoutes />
-                </PageLayout>
+                <AppRoutes />
             </SideBar>
         </>
     );

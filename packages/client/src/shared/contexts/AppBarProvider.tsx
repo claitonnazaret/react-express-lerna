@@ -1,12 +1,12 @@
 import {
     BottomNavigation,
     BottomNavigationAction,
-    Divider,
     Icon,
     Link,
     Paper,
     Toolbar,
     Typography,
+    useTheme,
 } from '@mui/material';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -18,6 +18,7 @@ export const AppBarContext = createContext({});
 
 export const AppBarProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const location = useLocation();
+    const theme = useTheme();
     const pathnames = location.pathname.split('/').filter((x) => x);
 
     return (
@@ -52,8 +53,19 @@ export const AppBarProvider: FC<{ children: ReactNode }> = ({ children }) => {
                     </Breadcrumbs>
                 </Box>
             </Toolbar>
-            <Divider />
-            {children}
+            <Paper
+                variant="outlined"
+                square
+                sx={{
+                    flexGrow: 1,
+                    height: `calc(100vh - ${theme.spacing(23.3)})`,
+                    overflowX: 'hidden',
+                    overflowY: 'auto',
+                    padding: '0 20px',
+                }}
+            >
+                {children}
+            </Paper>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
                 <BottomNavigation showLabels>
                     <BottomNavigationAction label="Recents" icon={<Icon>restore</Icon>} />
