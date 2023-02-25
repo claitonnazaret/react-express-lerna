@@ -17,7 +17,12 @@ const AppRoutes = () => {
         <Routes>
             <>
                 {routes.map((option) => (
-                    <Route key={uuid()} path={option.path} element={option.element} />
+                    <Route
+                        key={uuid()}
+                        index={option.index}
+                        path={option.path}
+                        element={option.element}
+                    />
                 ))}
             </>
         </Routes>

@@ -16,7 +16,7 @@ import { AppBarProvider, IDrawerOptionListItem } from '../../contexts';
 import uuid from 'react-uuid';
 import { useDrawer } from '../../contexts/hooks';
 import { ListItemLink } from './ListItemLink';
-import { PageLayout } from '../../layouts/PageLayout';
+import { PageLayout } from '../../layouts';
 
 interface ILeftMenu {
     children: ReactNode;
@@ -66,9 +66,7 @@ export const SideBar: React.FC<ILeftMenu> = ({ children }) => {
             </DrawerComponent>
             <Box component="main" flex={1}>
                 <Toolbar />
-                <AppBarProvider>
-                    <PageLayout>{children}</PageLayout>
-                </AppBarProvider>
+                <AppBarProvider>{children}</AppBarProvider>
             </Box>
         </Box>
     );

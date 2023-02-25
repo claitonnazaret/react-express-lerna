@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import AppRoutes from '../../routes';
 import { useDrawer } from '../../shared/contexts/hooks';
 import { SideBar } from '../components';
+import { PageLayout } from './PageLayout';
 import Logo from '../../assets/react.svg';
 
 export const MainLayout = () => {
@@ -17,10 +18,9 @@ export const MainLayout = () => {
     return (
         <>
             <SideBar>
-                <Button onClick={toogleOpen}>Open</Button>
-                <Box sx={{ backgroundColor: 'red', width: '500px', height: '500px' }}>
+                <PageLayout>
                     <AppRoutes />
-                </Box>
+                </PageLayout>
             </SideBar>
         </>
     );

@@ -5,11 +5,12 @@ import { IDrawerOptionListItem } from '../shared/contexts';
 import { PageLayout } from '../shared/layouts/PageLayout';
 
 interface IRoute {
+    index?: boolean;
     path: string;
     element: ReactNode;
 }
 export const routes: IRoute[] = [
-    { path: 'dashboard', element: <h1>Dashboard</h1> },
+    { index: true, path: 'dashboard', element: <h1>Dashboard</h1> },
     { path: 'cadastro/usuario', element: <h1>Submenu 1</h1> },
     { path: 'submenu2/submenu2-menu1', element: <h1>SubMenu 2 - Menu 1</h1> },
     { path: 'submenu2/submenu2-menu2', element: <h1>SubMenu 2 - Menu 2</h1> },
