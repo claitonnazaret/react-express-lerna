@@ -48,14 +48,10 @@ ApiService.interceptors.response.use(
                 const resData = await axios.get(`${VITE_SERVER_URL}/api/user/refresh-token`, {
                     withCredentials: true,
                 });
-                const response: IUser = {
-                    email: resData.data?.email,
-                    accessToken: resData.data?.accessToken,
-                };
 
                 config.headers.Authorization = `Bearer ${resData?.data?.token}`;
 
-                StorageService.setUser(response);
+                StorageService.setUser(resData.data);
                 return ApiService(config);
             } catch (err) {
                 return Promise.reject(HandleError(err));

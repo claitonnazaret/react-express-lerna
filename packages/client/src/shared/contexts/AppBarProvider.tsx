@@ -6,6 +6,7 @@ import {
     Paper,
     Toolbar,
     Typography,
+    useMediaQuery,
     useTheme,
 } from '@mui/material';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
@@ -25,6 +26,7 @@ export const AppBarProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const theme = useTheme();
     const pathnames = location.pathname.split('/').filter((x) => x);
     const [titulo, setTitulo] = useState('Titulo da Pagina');
+    const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
     return (
         <AppBarContext.Provider value={{ setTitulo }}>
@@ -62,10 +64,11 @@ export const AppBarProvider: FC<{ children: ReactNode }> = ({ children }) => {
                 square
                 sx={{
                     flexGrow: 1,
-                    height: `calc(100vh - ${theme.spacing(23.3)})`,
+                    height: `calc(100vh - ${theme.spacing(sm ? 20.1 : 23.1)})`,
                     overflowX: 'hidden',
                     overflowY: 'auto',
-                    padding: '0 20px',
+                    paddingLeft: 2,
+                    paddingRight: 2,
                 }}
             >
                 {children}

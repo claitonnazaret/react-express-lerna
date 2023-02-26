@@ -3,6 +3,7 @@ import { useAuth, useLoading } from '../../shared/contexts/hooks';
 import { ProfileService } from '../../shared/services';
 import { useSnackbar } from 'notistack';
 import { AxiosError } from 'axios';
+import { useAppForm } from '../../shared/contexts/hooks/useAppForm';
 
 interface IProfile {
     id?: number;
@@ -20,8 +21,21 @@ const ProfilePage = () => {
     const { id } = useAuth();
     const { loading } = useLoading();
     const { enqueueSnackbar } = useSnackbar();
+    const { setActions } = useAppForm();
+
+    const handleTeste = async () => {
+        await alert('Testou o botão');
+    };
 
     useEffect(() => {
+        setActions([
+            {
+                icon: 'save',
+                label: 'Salvar',
+                handle: handleTeste,
+            },
+        ]);
+
         loading(true);
         ProfileService.findOne(id ?? 0)
             .then((res) => {

@@ -3,6 +3,7 @@ import { useDrawer } from '../../shared/contexts/hooks';
 import { SideBar } from '../components';
 import Logo from '../../assets/react.svg';
 import AppRoutes from '../../routes';
+import { AppFormProvider } from '../contexts';
 
 export const MainLayout = () => {
     const { toogleOpen, setAppInfo } = useDrawer();
@@ -16,7 +17,9 @@ export const MainLayout = () => {
     return (
         <>
             <SideBar>
-                <AppRoutes />
+                <AppFormProvider>
+                    <AppRoutes />
+                </AppFormProvider>
             </SideBar>
         </>
     );
