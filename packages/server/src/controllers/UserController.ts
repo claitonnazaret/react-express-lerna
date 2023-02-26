@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Profile from '../db/models/Profile';
 import Role from '../db/models/Role';
 import User from '../db/models/User';
-import Helper from '../helpers/Helper';
+import Helper, { UserData } from '../helpers/Helper';
 import PasswordHelper from '../helpers/PasswordHelper';
 
 export default {
@@ -60,12 +60,6 @@ export default {
                 return res.status(401).send('Unauthorized');
             }
 
-            const profile = await Profile.findOne({
-                where: {
-                    userId: user.id,
-                },
-            });
-
             const role = await Role.findOne({
                 attributes: ['roleName'],
                 where: {
@@ -73,13 +67,12 @@ export default {
                 },
             });
 
-            const dataUser = {
-                nome: `${profile?.nome} ${profile?.sobreNome}`,
+            const dataUser: UserData = {
+                id: user.id,
                 email: user.email,
-                role: role?.roleName,
+                role: role?.roleName ?? null,
                 verified: user.verified,
                 active: user.active,
-                profileId: profile?.id,
             };
 
             const accessToken = Helper.GenerateToken(dataUser);
@@ -94,13 +87,14 @@ export default {
             });
 
             const responseUser = {
-                nome: `${profile?.nome} ${profile?.sobreNome}`,
+                id: user.id,
                 email: user.email,
                 role: role?.roleName,
                 verified: user.verified,
                 active: user.active,
                 accessToken: accessToken,
             };
+
             return res.status(200).send(responseUser);
         } catch (error: any) {
             return res.status(500).send(error);
@@ -120,19 +114,19 @@ export default {
             }
 
             const accessToken = Helper.GenerateToken({
+                id: decodedUser.id,
                 email: decodedUser.email,
-                roleId: decodedUser.roleId,
+                role: decodedUser.role,
                 verified: decodedUser.verified,
                 active: decodedUser.active,
-                profileId: decodedUser.profileId,
             });
 
             const resultUser = {
+                id: decodedUser.id,
                 email: decodedUser.email,
-                roleId: decodedUser.roleId,
+                role: decodedUser.role,
                 verified: decodedUser.verified,
                 active: decodedUser.active,
-                profileId: decodedUser.profileId,
                 accessToken: accessToken,
             };
 

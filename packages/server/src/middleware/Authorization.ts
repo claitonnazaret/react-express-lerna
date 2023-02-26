@@ -18,7 +18,7 @@ export default {
             }
 
             res.locals.userEmail = result?.email;
-            res.locals.roleId = result?.roleId;
+            res.locals.role = result?.role;
 
             next();
         } catch (error: any) {

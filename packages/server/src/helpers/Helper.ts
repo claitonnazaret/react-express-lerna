@@ -4,24 +4,23 @@ import _ from 'lodash';
 
 dotenv.config();
 
-interface UserData {
-    name: string | null;
+export interface UserData {
+    id: number;
     email: string | null;
-    roleId: string | null;
+    role: string | null;
     verified: boolean | null;
-    profileId: number | null;
     active: boolean | null;
 }
 
 const { JWT_TOKEN, JWT_REFRESH_TOKEN, JWT_TOKEN_TIMEOUT, JWT_REFRESH_TOKEN_TIMEOUT } = process.env;
 
 export default {
-    GenerateToken: (data: any): string => {
+    GenerateToken: (data: UserData): string => {
         const accessToken = jwt.sign(data, JWT_TOKEN as string, { expiresIn: JWT_TOKEN_TIMEOUT as string });
 
         return accessToken;
     },
-    GenerateRefreshToken: (data: any): string => {
+    GenerateRefreshToken: (data: UserData): string => {
         const accessToken = jwt.sign(data, JWT_REFRESH_TOKEN as string, {
             expiresIn: JWT_REFRESH_TOKEN_TIMEOUT as string,
         });

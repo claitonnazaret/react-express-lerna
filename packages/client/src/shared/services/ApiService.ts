@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import _ from 'lodash';
 import { IUser } from '../types';
-import StorageService from './StorageService';
+import { StorageService } from './StorageService';
 
 const { VITE_SERVER_URL } = import.meta.env;
 

@@ -26,7 +26,6 @@ function Copyright(props: any) {
 const LoginPage = () => {
     const auth = useAuth();
     const [showPassword, setShowPassword] = useState(false);
-    const [loadingBtn, setLoadingBtn] = useState(false);
 
     const handleShowPassword = () => setShowPassword((show) => !show);
 

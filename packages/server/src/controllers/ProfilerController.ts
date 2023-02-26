@@ -28,7 +28,11 @@ export default {
     findById: async (req: Request, res: Response): Promise<Response> => {
         try {
             const { id } = req.params;
-            const profile = await Profile.findByPk(id);
+            const profile = await Profile.findOne({
+                where: {
+                    userId: id,
+                },
+            });
 
             if (!profile) {
                 return res.status(404).send('Data Not found');
