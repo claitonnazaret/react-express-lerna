@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
-import { createBrowserRouter, redirect } from 'react-router-dom';
-import { DashboardPage, LoginPage, RegisterPage } from '../pages';
+import { DashboardPage } from '../pages';
 import { IDrawerOptionListItem } from '../shared/contexts';
-import { PageLayout } from '../shared/layouts/PageLayout';
 
 interface IRoute {
     index?: boolean;
@@ -10,7 +8,7 @@ interface IRoute {
     element: ReactNode;
 }
 export const routes: IRoute[] = [
-    { index: true, path: 'dashboard', element: <h1>Dashboard</h1> },
+    { index: true, path: 'dashboard', element: <DashboardPage /> },
     { path: 'cadastro/usuario', element: <h1>Submenu 1</h1> },
     { path: 'submenu2/submenu2-menu1', element: <h1>SubMenu 2 - Menu 1</h1> },
     { path: 'submenu2/submenu2-menu2', element: <h1>SubMenu 2 - Menu 2</h1> },

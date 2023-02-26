@@ -10,7 +10,7 @@ type IFormRadioGroup = {
 } & RadioGroupProps &
     FormControlProps;
 
-const FormRadioGroup: FC<IFormRadioGroup> = ({
+export const FormRadioGroup: FC<IFormRadioGroup> = ({
     name,
     options,
     type = 'string',
@@ -42,5 +42,3 @@ const FormRadioGroup: FC<IFormRadioGroup> = ({
         </>
     );
 };
-
-export default FormRadioGroup;
