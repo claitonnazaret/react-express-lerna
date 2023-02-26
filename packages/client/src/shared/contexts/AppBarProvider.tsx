@@ -54,7 +54,6 @@ export const AppBarProvider: FC<{ children: ReactNode }> = ({ children }) => {
                 </Box>
             </Toolbar>
             <Paper
-                variant="outlined"
                 square
                 sx={{
                     flexGrow: 1,

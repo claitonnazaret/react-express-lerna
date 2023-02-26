@@ -11,6 +11,43 @@ const DashboardPage = () => {
         <>
             <h1>Dashboard Page</h1>
             <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
+            <pre>{JSON.stringify({ name, email, role }, null, 2)}</pre>
         </>
     );
 };
