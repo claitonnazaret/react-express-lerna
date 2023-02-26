@@ -9,6 +9,7 @@ interface UserData {
     email: string | null;
     roleId: string | null;
     verified: boolean | null;
+    profileId: number | null;
     active: boolean | null;
 }
 

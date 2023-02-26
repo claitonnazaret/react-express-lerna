@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     Avatar,
     Box,
@@ -5,15 +6,16 @@ import {
     IconButton,
     Menu,
     MenuItem,
+    MenuList,
     Toolbar,
     Tooltip,
     Typography,
     useTheme,
 } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import React from 'react';
 import { useAppTheme, useAuth, useDrawer } from '../../contexts/hooks';
 import { AppBarComponent } from './util';
+import { Link } from 'react-router-dom';
 
 interface IAppbar {}
 
@@ -54,7 +56,11 @@ export const AppBar: React.FC<IAppbar> = () => {
                 <Box sx={{ flexGrow: 0 }}>
                     <Tooltip title="Open settings">
                         <IconButton onClick={(ev) => setProfile(ev.currentTarget)} sx={{ p: 0 }}>
-                            <Avatar alt="Remy Sharp" src={appInfo.iconProfile} />
+                            <Avatar
+                                alt="Remy Sharp"
+                                src={appInfo.iconProfile}
+                                sx={{ width: 24, height: 24 }}
+                            />
                         </IconButton>
                     </Tooltip>
                     <Menu
@@ -73,12 +79,20 @@ export const AppBar: React.FC<IAppbar> = () => {
                         open={Boolean(profile)}
                         onClose={() => setProfile(null)}
                     >
-                        <MenuItem onClick={() => setProfile(null)}>
-                            <Typography textAlign="center"> Profile </Typography>
-                        </MenuItem>
-                        <MenuItem onClick={logout}>
-                            <Typography textAlign="center"> Logout </Typography>
-                        </MenuItem>
+                        <MenuList dense>
+                            <MenuItem
+                                component={Link}
+                                onClick={() => setProfile(null)}
+                                to="/profile"
+                            >
+                                <Icon>person</Icon>
+                                <Typography textAlign="center"> Profile </Typography>
+                            </MenuItem>
+                            <MenuItem onClick={logout}>
+                                <Icon>logout</Icon>
+                                <Typography textAlign="center"> Logout </Typography>
+                            </MenuItem>
+                        </MenuList>
                     </Menu>
                 </Box>
             </Toolbar>

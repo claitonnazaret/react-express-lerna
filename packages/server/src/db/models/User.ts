@@ -1,11 +1,13 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import connection from '../../config/dbConnect';
+import Profile from './Profile';
 import Role from './Role';
 
 interface UserAttributes {
     id?: number;
     name?: string | null;
     email?: string | null;
+    avatar?: string | null;
     roleId?: number | null;
     password?: string | null;
     accessToken?: string | null;
@@ -21,8 +23,6 @@ export interface UserOutput extends Required<UserAttributes> {}
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
     public id!: number;
-
-    public name!: string;
     public email!: string;
     public roleId!: number;
     public password!: string;
@@ -41,10 +41,6 @@ User.init(
             autoIncrement: true,
             primaryKey: true,
             type: DataTypes.BIGINT,
-        },
-        name: {
-            allowNull: true,
-            type: DataTypes.STRING,
         },
         email: {
             allowNull: true,
@@ -78,6 +74,6 @@ User.init(
     }
 );
 
-User.belongsTo(Role, { foreignKey: 'roleId' });
+User.belongsTo(Role, { as: 'role', foreignKey: 'roleId' });
 
 export default User;

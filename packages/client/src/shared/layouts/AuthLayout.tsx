@@ -9,5 +9,9 @@ interface IAuthLayout {
 export const AuthLayout: FC<IAuthLayout> = ({ children }) => {
     const user = useAuth();
 
-    return !user.accessToken ? <LoginPage /> : children;
+    if (!user.accessToken) {
+        return <LoginPage />;
+    }
+
+    return children;
 };

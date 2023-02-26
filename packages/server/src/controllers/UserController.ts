@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import Profile from '../db/models/Profile';
 import Role from '../db/models/Role';
 import User from '../db/models/User';
 import Helper from '../helpers/Helper';
@@ -7,18 +8,28 @@ import PasswordHelper from '../helpers/PasswordHelper';
 export default {
     register: async (req: Request, res: Response): Promise<Response> => {
         try {
-            const { name, email, password, confirmPassword, roleId } = req.body;
+            const { name, email, password, roleId } = req.body;
 
             const hashed = await PasswordHelper.PasswordHashing(password);
 
             const user = await User.create({
-                name,
                 email,
                 password: hashed,
                 active: true,
                 verified: true,
                 roleId: roleId,
             });
+
+            const nameStruct = name.split(' ');
+            let sobreNome = '';
+            if (nameStruct.length > 1) {
+                sobreNome = nameStruct[1];
+            }
+            const profile = await Profile.create({
+                nome: name,
+                sobreNome,
+            });
+
             return res.status(201).send(user);
         } catch (error: any) {
             return res.status(500).send(error);
@@ -31,6 +42,12 @@ export default {
             const user = await User.findOne({
                 where: {
                     email: email,
+                    active: true,
+                },
+                include: {
+                    model: Role,
+                    as: 'role',
+                    attributes: ['roleName'],
                 },
             });
 
@@ -43,13 +60,28 @@ export default {
                 return res.status(401).send('Unauthorized');
             }
 
+            const profile = await Profile.findOne({
+                where: {
+                    userId: user.id,
+                },
+            });
+
+            const role = await Role.findOne({
+                attributes: ['roleName'],
+                where: {
+                    id: user.roleId,
+                },
+            });
+
             const dataUser = {
-                name: user.name,
+                nome: `${profile?.nome} ${profile?.sobreNome}`,
                 email: user.email,
-                roleId: user.roleId,
+                role: role?.roleName,
                 verified: user.verified,
                 active: user.active,
+                profileId: profile?.id,
             };
+
             const accessToken = Helper.GenerateToken(dataUser);
             const refreshToken = Helper.GenerateRefreshToken(dataUser);
 
@@ -62,9 +94,9 @@ export default {
             });
 
             const responseUser = {
-                name: user.name,
+                nome: `${profile?.nome} ${profile?.sobreNome}`,
                 email: user.email,
-                roleId: user.roleId,
+                role: role?.roleName,
                 verified: user.verified,
                 active: user.active,
                 accessToken: accessToken,
@@ -88,19 +120,19 @@ export default {
             }
 
             const accessToken = Helper.GenerateToken({
-                name: decodedUser.name,
                 email: decodedUser.email,
                 roleId: decodedUser.roleId,
                 verified: decodedUser.verified,
                 active: decodedUser.active,
+                profileId: decodedUser.profileId,
             });
 
             const resultUser = {
-                name: decodedUser.name,
                 email: decodedUser.email,
                 roleId: decodedUser.roleId,
                 verified: decodedUser.verified,
                 active: decodedUser.active,
+                profileId: decodedUser.profileId,
                 accessToken: accessToken,
             };
 
@@ -130,6 +162,25 @@ export default {
             user.accessToken = '';
 
             return res.status(200).send(user);
+        } catch (error: any) {
+            return res.status(500).send(error);
+        }
+    },
+    delete: async (req: Request, res: Response): Promise<Response> => {
+        try {
+            const { id } = req.params;
+
+            const user = await User.findByPk(id);
+
+            if (!user) {
+                return res.status(404).send('Data Not found');
+            }
+
+            user.active = false;
+
+            await user.save();
+
+            return res.status(204);
         } catch (error: any) {
             return res.status(500).send(error);
         }

@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { DashboardPage } from '../pages';
+import ProfilePage from '../pages/ProfilePage';
 import { IDrawerOptionListItem } from '../shared/contexts';
 
 interface IRoute {
@@ -9,6 +10,7 @@ interface IRoute {
 }
 export const routes: IRoute[] = [
     { index: true, path: 'dashboard', element: <DashboardPage /> },
+    { path: 'profile', element: <ProfilePage /> },
     { path: 'cadastro/usuario', element: <h1>Submenu 1</h1> },
     { path: 'submenu2/submenu2-menu1', element: <h1>SubMenu 2 - Menu 1</h1> },
     { path: 'submenu2/submenu2-menu2', element: <h1>SubMenu 2 - Menu 2</h1> },

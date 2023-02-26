@@ -43,7 +43,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
 
         if (userLS != null) {
             setUser(userLS);
-            userInfo();
         }
     }, []);
 
@@ -84,18 +83,6 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
                 setUser(null);
                 StorageService.removeUser();
                 navigate('/');
-            })
-            .catch((err: AxiosError) => {
-                enqueueSnackbar(err.message, { variant: 'error' });
-            })
-            .finally(() => loading(false));
-    };
-
-    const userInfo = async () => {
-        loading(true);
-        await UserService.userInfo()
-            .then((res) => {
-                setUser({ ...user, role: res.data?.Role?.roleName });
             })
             .catch((err: AxiosError) => {
                 enqueueSnackbar(err.message, { variant: 'error' });

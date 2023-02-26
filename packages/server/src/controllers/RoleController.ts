@@ -61,7 +61,9 @@ export default {
                 return res.status(404).send('Data Not found');
             }
 
-            await role.destroy();
+            role.active = false;
+
+            await role.save();
 
             return res.status(204);
         } catch (error: any) {

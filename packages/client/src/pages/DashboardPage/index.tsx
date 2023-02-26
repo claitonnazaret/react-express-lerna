@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import { Button } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../shared/contexts/hooks';
+import { useAppBar } from '../../shared/contexts/hooks/useAppBar';
 
 const DashboardPage = () => {
     const navigate = useNavigate();
     const { name, email, role } = useAuth();
+    const { setTitulo } = useAppBar();
+
+    useEffect(() => setTitulo('Dashboard'), []);
 
     return (
         <>

@@ -33,8 +33,8 @@ const LoginPage = () => {
     const methods = useForm<RegisterInput>({
         resolver: zodResolver(registerSchema),
         values: {
-            email: 'admin@gmail.com',
-            password: '12345678',
+            email: 'claitonnazaret@gmail.com',
+            password: 'L5h3x7V6',
         },
     });
 
