@@ -57,7 +57,7 @@ export const SideBar: React.FC<ILeftMenu> = ({ children }) => {
                     }}
                 >
                     <List component="nav">
-                        {drawerOptions.map((option: IDrawerOptionListItem) => (
+                        {drawerOptions?.map((option: IDrawerOptionListItem) => (
                             <ListItemLink key={uuid()} {...option} />
                         ))}
                     </List>

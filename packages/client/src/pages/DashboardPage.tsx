@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../shared/contexts/hooks';
-import { useAppBar } from '../../shared/contexts/hooks/useAppBar';
+import { useAuth } from '../shared/contexts/hooks';
+import { useAppBar } from '../shared/contexts/hooks/useAppBar';
 
-const DashboardPage = () => {
+export const DashboardPage = () => {
     const navigate = useNavigate();
     const { name, email, role } = useAuth();
     const { setTitulo } = useAppBar();
@@ -54,5 +54,3 @@ const DashboardPage = () => {
         </>
     );
 };
-
-export default DashboardPage;

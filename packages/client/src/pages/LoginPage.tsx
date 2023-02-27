@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar, Grid, Link, Typography, InputAdornment, IconButton, Button } from '@mui/material';
-import { Box } from '@mui/system';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { RegisterInput, registerSchema } from './util';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { FormInput } from '../shared/components';
+import { useAuth, useLoading } from '../shared/contexts/hooks';
+import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
+import { object, string, TypeOf } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { AxiosError } from 'axios';
+import { Box } from '@mui/system';
 import _ from 'lodash';
-import { FormInput } from '../../shared/components';
-import { useAuth } from '../../shared/contexts/hooks';
 
-function Copyright(props: any) {
+export const Copyright = (props: any) => {
     return (
         <Typography variant="body2" color="text.secondary" align="center" {...props}>
             {'Copyright © '}
@@ -21,10 +24,23 @@ function Copyright(props: any) {
             {'.'}
         </Typography>
     );
-}
+};
 
-const LoginPage = () => {
+const registerSchema = object({
+    email: string().nonempty('Email é obrigatório').email('Email inválido'),
+    password: string()
+        .nonempty('Senha é obrigatório')
+        .min(8, 'Senha deve conter mais de 8 caracteres')
+        .max(32, 'Senha deve conter no máximo 32 caracteress'),
+});
+
+type RegisterInput = TypeOf<typeof registerSchema>;
+
+export const LoginPage = () => {
     const auth = useAuth();
+    const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+    const { loading } = useLoading();
     const [showPassword, setShowPassword] = useState(false);
 
     const handleShowPassword = () => setShowPassword((show) => !show);
@@ -51,7 +67,18 @@ const LoginPage = () => {
     }, [isSubmitSuccessful]);
 
     const onSubmitHandler: SubmitHandler<RegisterInput> = async ({ email, password }) => {
-        await auth.login(email, password);
+        loading(true);
+        await auth
+            .login(email, password)
+            .then(() => {
+                navigate('/dashboard');
+            })
+            .catch((err: AxiosError) => {
+                const message =
+                    err.response?.status == 401 ? 'Email / Senha inválido!' : err.message;
+                enqueueSnackbar(message, { variant: 'error' });
+            })
+            .finally(() => loading(false));
     };
 
     return (
@@ -132,7 +159,7 @@ const LoginPage = () => {
                             </Grid>
                             <Grid item>
                                 <Link href="/register" variant="body2">
-                                    {'Crie uma conta'}
+                                    Crie uma conta
                                 </Link>
                             </Grid>
                         </Grid>
@@ -143,5 +170,3 @@ const LoginPage = () => {
         </Box>
     );
 };
-
-export default LoginPage;

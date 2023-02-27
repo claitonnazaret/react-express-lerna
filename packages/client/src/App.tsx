@@ -1,8 +1,7 @@
 import { SnackbarProvider } from 'notistack';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { LoginPage, RegisterPage } from './pages';
-import { AppThemeProvider, AuthProvider, DrawerProvider, LoadingProvider } from './shared/contexts';
-import { AuthLayout, MainLayout } from './shared/layouts';
+import { RouterProvider } from 'react-router-dom';
+import { routes } from './routes';
+import { AppThemeProvider, AuthProvider, LoadingProvider } from './shared/contexts';
 
 function App() {
     return (
@@ -12,25 +11,9 @@ function App() {
                 disableWindowBlurListener={true}
             >
                 <LoadingProvider>
-                    <BrowserRouter>
-                        <AuthProvider>
-                            <Routes>
-                                <Route path="/login" element={<LoginPage />} />
-                                <Route path="/register" element={<RegisterPage />} />
-                                <Route
-                                    path="/*"
-                                    element={
-                                        <AuthLayout>
-                                            <DrawerProvider>
-                                                <MainLayout />
-                                            </DrawerProvider>
-                                        </AuthLayout>
-                                    }
-                                />
-                                <Route path="*" element={<Navigate to="login" />} />
-                            </Routes>
-                        </AuthProvider>
-                    </BrowserRouter>
+                    <AuthProvider>
+                        <RouterProvider router={routes} />
+                    </AuthProvider>
                 </LoadingProvider>
             </SnackbarProvider>
         </AppThemeProvider>

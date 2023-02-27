@@ -2,25 +2,25 @@ import { useEffect } from 'react';
 import { useDrawer } from '../../shared/contexts/hooks';
 import { SideBar } from '../components';
 import Logo from '../../assets/react.svg';
-import AppRoutes from '../../routes';
+import { Outlet } from 'react-router-dom';
 import { AppFormProvider } from '../contexts';
+import { menus } from '../../routes';
 
 export const MainLayout = () => {
-    const { toogleOpen, setAppInfo } = useDrawer();
+    const { setAppInfo } = useDrawer();
+    const { setDrawerOptions } = useDrawer();
 
     useEffect(() => {
-        setAppInfo({
-            titulo: 'Novo Titulo',
-            iconProfile: Logo,
-        });
+        setAppInfo({ titulo: 'Novo Titulo', iconProfile: Logo });
+        setDrawerOptions(menus);
     }, []);
+
+    useEffect(() => {}, []);
     return (
-        <>
-            <SideBar>
-                <AppFormProvider>
-                    <AppRoutes />
-                </AppFormProvider>
-            </SideBar>
-        </>
+        <SideBar>
+            <AppFormProvider>
+                <Outlet />
+            </AppFormProvider>
+        </SideBar>
     );
 };

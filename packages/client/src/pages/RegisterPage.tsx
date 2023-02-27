@@ -3,28 +3,41 @@ import { Avatar, IconButton, InputAdornment, Link, Typography, Button } from '@m
 import { Box } from '@mui/system';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RegisterInput, registerSchema } from './util';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { FormInput, FormRadioGroup } from '../../shared/components';
+import { FormInput, FormRadioGroup } from '../shared/components';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { useAuth, useLoading } from '../shared/contexts/hooks';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { object, string, TypeOf } from 'zod';
 import _ from 'lodash';
-import { useAuth } from '../../shared/contexts/hooks';
+import { Copyright } from './LoginPage';
 
-function Copyright(props: any) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+const registerSchema = object({
+    name: string().nonempty('Nome é obrigatório'),
+    email: string().nonempty('Email é obrigatório').email('Email inválido'),
+    password: string()
+        .nonempty('Senha é obrigatório')
+        .min(8, 'Senha deve conter mais de 8 caracteres')
+        .max(32, 'Senha deve conter no máximo 32 caracteress'),
+    confirmPassword: string()
+        .nonempty('Você deve confirmar a senha')
+        .min(8, 'Senha deve conter mais de 8 caracteres')
+        .max(32, 'Senha deve conter no máximo 32 caracteress'),
+    roleId: string().nonempty('Você deve informar o Tipo de cadastro'),
+}).refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'As senhas não coincidem',
+});
 
-const RegisterPage = () => {
+type RegisterInput = TypeOf<typeof registerSchema>;
+
+export const RegisterPage = () => {
     const auth = useAuth();
+    const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
+    const { loading } = useLoading();
 
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -53,13 +66,24 @@ const RegisterPage = () => {
         confirmPassword,
         roleId,
     }) => {
-        await auth.register({
-            name,
-            email,
-            password,
-            confirmPassword,
-            roleId,
-        });
+        loading(true);
+        await auth
+            .register({
+                name,
+                email,
+                password,
+                confirmPassword,
+                roleId,
+            })
+            .then(() => {
+                navigate('/login');
+            })
+            .catch((err: AxiosError) => {
+                const message =
+                    err.response?.status == 401 ? 'Email / Senha inválido!' : err.message;
+                enqueueSnackbar(message, { variant: 'error' });
+            })
+            .finally(() => loading(false));
     };
 
     const handleShowPassword = () => setShowPassword((show) => !show);
@@ -181,7 +205,7 @@ const RegisterPage = () => {
                         />
 
                         <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-                            <span>Login</span>
+                            <span>Registrar</span>
                         </Button>
                     </Box>
                 </FormProvider>
@@ -190,5 +214,3 @@ const RegisterPage = () => {
         </Box>
     );
 };
-
-export default RegisterPage;
