@@ -1,87 +1,86 @@
-import { Request, Response } from 'express';
+import { type Request, type Response } from 'express';
 import Role from '../db/models/Role';
-import Helper from '../helpers/Helper';
 
 export default {
-    findAll: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const roles = await Role.findAll({
-                where: {
-                    active: true,
-                },
-            });
+  findAll: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const roles = await Role.findAll({
+        where: {
+          active: true,
+        },
+      });
 
-            return res.status(200).send(roles);
-        } catch (error: any) {
-            return res.status(500).send(error);
-        }
-    },
-    create: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const { roleName, active } = req.body;
+      return res.status(200).send(roles);
+    } catch (error: any) {
+      return res.status(500).send(error);
+    }
+  },
+  create: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { roleName, active } = req.body;
 
-            const create = await Role.create({
-                roleName,
-                active,
-            });
+      const create = await Role.create({
+        roleName,
+        active,
+      });
 
-            return res.status(201).send(create);
-        } catch (error: any) {
-            return res.status(500).send(error);
-        }
-    },
-    update: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const { id } = req.params;
-            const { roleName, active } = req.body;
+      return res.status(201).send(create);
+    } catch (error: any) {
+      return res.status(500).send(error);
+    }
+  },
+  update: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { id } = req.params;
+      const { roleName, active } = req.body;
 
-            const role = await Role.findByPk(id);
+      const role = await Role.findByPk(id);
 
-            if (!role) {
-                return res.status(404).send('Data Not found');
-            }
+      if (role == null) {
+        return res.status(404).send('Data Not found');
+      }
 
-            role.roleName = roleName;
-            role.active = active;
+      role.roleName = roleName;
+      role.active = active;
 
-            await role.save();
+      await role.save();
 
-            return res.status(200).send(role);
-        } catch (error: any) {
-            return res.status(500).send(error);
-        }
-    },
-    delete: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const { id } = req.params;
+      return res.status(200).send(role);
+    } catch (error: any) {
+      return res.status(500).send(error);
+    }
+  },
+  delete: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { id } = req.params;
 
-            const role = await Role.findByPk(id);
+      const role = await Role.findByPk(id);
 
-            if (!role) {
-                return res.status(404).send('Data Not found');
-            }
+      if (role == null) {
+        return res.status(404).send('Data Not found');
+      }
 
-            role.active = false;
+      role.active = false;
 
-            await role.save();
+      await role.save();
 
-            return res.status(204);
-        } catch (error: any) {
-            return res.status(500).send(error);
-        }
-    },
-    findById: async (req: Request, res: Response): Promise<Response> => {
-        try {
-            const { id } = req.params;
-            const role = await Role.findByPk(id);
+      return res.status(204);
+    } catch (error: any) {
+      return res.status(500).send(error);
+    }
+  },
+  findById: async (req: Request, res: Response): Promise<Response> => {
+    try {
+      const { id } = req.params;
+      const role = await Role.findByPk(id);
 
-            if (!role) {
-                return res.status(404).send('Data Not found');
-            }
+      if (role == null) {
+        return res.status(404).send('Data Not found');
+      }
 
-            return res.status(200).send(role);
-        } catch (error: any) {
-            return res.status(500).send(error);
-        }
-    },
+      return res.status(200).send(role);
+    } catch (error: any) {
+      return res.status(500).send(error);
+    }
+  },
 };

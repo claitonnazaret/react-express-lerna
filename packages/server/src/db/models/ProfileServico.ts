@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional } from 'sequelize';
 import connection from '../../config/dbConnect';
 import Profile from './Profile';
 import Servico from './Servico';

@@ -18,6 +18,9 @@ module.exports = {
             avatar: {
                 type: Sequelize.STRING,
             },
+            arquivo: {
+                type: Sequelize.STRING,
+            },
             documento: {
                 type: Sequelize.STRING,
             },

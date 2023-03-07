@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import { DataTypes, Model, type Optional } from 'sequelize';
 import connection from '../../config/dbConnect';
 import User from './User';
 
@@ -7,6 +7,7 @@ interface ProfileAttributes {
     nome?: string | null;
     sobreNome?: string | null;
     avatar?: string | null;
+    arquivo?: string | null;
     documento?: string | null;
     userId?: number;
     createdAt?: Date;
@@ -21,6 +22,7 @@ class Profile extends Model<ProfileAttributes, ProfileInput> implements ProfileA
     public nome!: string;
     public sobreNome!: string;
     public avatar!: string;
+    public arquivo!: string;
     public documento!: string;
     public userId!: number;
     public readonly createdAt!: Date;
@@ -44,6 +46,10 @@ Profile.init(
             type: DataTypes.STRING,
         },
         avatar: {
+            allowNull: true,
+            type: DataTypes.STRING,
+        },
+        arquivo: {
             allowNull: true,
             type: DataTypes.STRING,
         },

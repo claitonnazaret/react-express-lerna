@@ -1,5 +1,5 @@
 import Validator from 'validatorjs';
-import { Request, Response, NextFunction } from 'express';
+import { type Request, type Response, type NextFunction } from 'express';
 import User from '../../db/models/User';
 
 const RegisterValidation = async (req: Request, res: Response, next: NextFunction) => {
@@ -32,7 +32,7 @@ const RegisterValidation = async (req: Request, res: Response, next: NextFunctio
             },
         });
 
-        if (user) {
+        if (user != null) {
             return res.status(400).send('Email já cadastrado!');
         }
 
