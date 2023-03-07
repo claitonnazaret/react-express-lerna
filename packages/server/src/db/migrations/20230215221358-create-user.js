@@ -9,9 +9,6 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.BIGINT,
             },
-            name: {
-                type: Sequelize.STRING,
-            },
             email: {
                 type: Sequelize.STRING,
             },

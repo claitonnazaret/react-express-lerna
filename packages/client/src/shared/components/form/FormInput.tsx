@@ -21,6 +21,7 @@ export const FormInput: FC<IFormInputProps> = ({ name, ...otherProps }: IFormInp
                 <TextFieldElement
                     {...otherProps}
                     {...field}
+                    size="small"
                     parseError={(error) => (error ? String(errors[name]?.message) : '')}
                 />
             )}

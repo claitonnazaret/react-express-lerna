@@ -1,13 +1,13 @@
 import { Box, Grid, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../shared/contexts/hooks';
+import { useAuth } from '../shared/contexts/hooks';
 
-export default function NotFoundPage() {
-    const auth = useAuth();
+export const NotFoundPage = () => {
+    const { accessToken } = useAuth();
     const navigate = useNavigate();
 
     const goHome = () => {
-        navigate(!auth.accessToken ? '/' : '/dashboard');
+        navigate(!accessToken ? '/login' : '/');
     };
 
     return (
@@ -30,4 +30,4 @@ export default function NotFoundPage() {
             </Grid>
         </Box>
     );
-}
+};

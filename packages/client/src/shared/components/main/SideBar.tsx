@@ -1,13 +1,13 @@
 import {
-    Box,
-    CssBaseline,
-    Divider,
-    Icon,
-    IconButton,
-    List,
-    Toolbar,
-    useMediaQuery,
-    useTheme,
+  Box,
+  CssBaseline,
+  Divider,
+  Icon,
+  IconButton,
+  List,
+  Toolbar,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material';
 import { ReactNode, useEffect } from 'react';
 import { AppBar } from './AppBar';
@@ -18,55 +18,55 @@ import { useDrawer } from '../../contexts/hooks';
 import { ListItemLink } from './ListItemLink';
 
 interface ILeftMenu {
-    children: ReactNode;
+  children: ReactNode;
 }
 
 export const SideBar: React.FC<ILeftMenu> = ({ children }) => {
-    const theme = useTheme();
-    const { isOpen, setOpen, toogleOpen, drawerOptions } = useDrawer();
-    const sm = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme();
+  const { isOpen, setOpen, toogleOpen, drawerOptions } = useDrawer();
+  const sm = useMediaQuery(theme.breakpoints.down('sm'));
 
-    useEffect(() => {
-        setOpen(!sm);
-    }, [sm]);
+  useEffect(() => {
+    setOpen(!sm);
+  }, [sm]);
 
-    return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar />
-            <DrawerComponent open={isOpen} variant="permanent">
-                <Toolbar
-                    sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        px: [1],
-                    }}
-                >
-                    <IconButton onClick={toogleOpen}>
-                        <Icon>chevron_left</Icon>
-                    </IconButton>
-                </Toolbar>
-                <Divider />
-                <Box
-                    sx={{
-                        flexGrow: 1,
-                        height: `calc(100vh - ${theme.spacing(8)})`,
-                        overflowX: 'hidden',
-                        overflowY: 'auto',
-                    }}
-                >
-                    <List component="nav">
-                        {drawerOptions.map((option: IDrawerOptionListItem) => (
-                            <ListItemLink key={uuid()} {...option} />
-                        ))}
-                    </List>
-                </Box>
-            </DrawerComponent>
-            <Box component="main" flex={1}>
-                <Toolbar />
-                <AppBarProvider>{children}</AppBarProvider>
-            </Box>
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+      <AppBar />
+      <DrawerComponent open={isOpen} variant="permanent">
+        <Toolbar
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            px: [1],
+          }}
+        >
+          <IconButton onClick={toogleOpen}>
+            <Icon>chevron_left</Icon>
+          </IconButton>
+        </Toolbar>
+        <Divider />
+        <Box
+          sx={{
+            flexGrow: 1,
+            height: `calc(100vh - ${theme.spacing(8)})`,
+            overflowX: 'hidden',
+            overflowY: 'auto',
+          }}
+        >
+          <List component="nav">
+            {drawerOptions?.map((option: IDrawerOptionListItem) => (
+              <ListItemLink key={uuid()} {...option} />
+            ))}
+          </List>
         </Box>
-    );
+      </DrawerComponent>
+      <Box component="main" flex={1}>
+        <Toolbar />
+        <AppBarProvider>{children}</AppBarProvider>
+      </Box>
+    </Box>
+  );
 };

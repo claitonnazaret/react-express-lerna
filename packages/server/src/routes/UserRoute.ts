@@ -10,5 +10,6 @@ route.post('/user/login', UserController.login);
 route.get('/user/refresh-token', UserController.refreshToken);
 route.get('/user/current-user', Authorization.Authenticated, UserController.userDetail);
 route.get('/user/logout', Authorization.Authenticated, UserController.logout);
+route.delete('/user/:id', Authorization.Authenticated, Authorization.Admin, UserController.delete);
 
 export default route;

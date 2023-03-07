@@ -4,7 +4,7 @@ import { IUser } from '../types';
 
 const KEY_USER = import.meta.env.VITE_KEY_USER as string;
 
-const StorageService = {
+export const StorageService = {
     setUser: (user: IUser | null) => {
         if (!user) {
             localStorage.removeItem(KEY_USER);
@@ -45,5 +45,3 @@ const StorageService = {
         localStorage.clear();
     },
 };
-
-export default StorageService;

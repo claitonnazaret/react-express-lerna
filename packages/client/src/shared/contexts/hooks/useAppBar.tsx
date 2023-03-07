@@ -1,8 +1,8 @@
-import { createContext } from 'react';
-import { AppBarContext } from '../AppBarProvider';
+import { useContext } from 'react';
+import { AppBarContext } from '..';
 
 export const useAppBar = () => {
-    const context = createContext(AppBarContext);
+    const context = useContext(AppBarContext);
 
     return context;
 };

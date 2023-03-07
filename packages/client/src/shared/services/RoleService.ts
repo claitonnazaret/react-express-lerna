@@ -1,14 +1,13 @@
 import ApiService from './ApiService';
 
-const RoleService = {
-    getAll: async () => await ApiService.get('/role'),
+const baseUrl = '/role';
+export const RoleService = {
+    getAll: async () => await ApiService.get(baseUrl),
     save: async (data: any, id?: number) => {
         return !id
-            ? await ApiService.post(`/role`, data)
-            : await ApiService.put(`/role/${id}`, data);
+            ? await ApiService.post(baseUrl, data)
+            : await ApiService.put(`${baseUrl}/${id}`, data);
     },
-    findOne: async (id: number) => await ApiService.get(`/role/${id}`),
-    delete: async (id: number) => await ApiService.delete(`/role/${id}`),
+    findOne: async (id: number) => await ApiService.get(`${baseUrl}/${id}`),
+    delete: async (id: number) => await ApiService.delete(`${baseUrl}/${id}`),
 };
-
-export default RoleService;

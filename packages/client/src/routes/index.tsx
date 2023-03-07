@@ -1,32 +1,79 @@
-import { useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { IDrawerOptionListItem } from '../shared/contexts';
-import { routes, menus } from './routes';
-import { useDrawer } from '../shared/contexts/hooks';
-import uuid from 'react-uuid';
-import _ from 'lodash';
+import { FC } from 'react';
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import {
+  LoginPage,
+  RegisterPage,
+  DashboardPage,
+  NotFoundPage,
+  ProfilePage,
+  CadastroUsuarioList,
+  CadastroUsuarioForm,
+} from '../pages';
+import { DrawerProvider, IDrawerOptionListItem } from '../shared/contexts';
+import { useAuth } from '../shared/contexts/hooks';
+import { MainLayout } from '../shared/layouts';
 
-const AppRoutes = () => {
-    const { setDrawerOptions } = useDrawer();
+// Private Route
+interface IPrivateRoute {
+  children: JSX.Element;
+}
 
-    useEffect(() => {
-        setDrawerOptions(menus);
-    }, []);
+const PrivateRoute: FC<IPrivateRoute> = ({ children }) => {
+  const { accessToken } = useAuth();
 
-    return (
-        <Routes>
-            <>
-                {routes.map((option) => (
-                    <Route
-                        key={uuid()}
-                        index={option.index}
-                        path={option.path}
-                        element={option.element}
-                    />
-                ))}
-            </>
-        </Routes>
-    );
+  if (!accessToken) {
+    return <LoginPage />;
+  }
+
+  return children;
 };
 
-export default AppRoutes;
+export const routes = createBrowserRouter([
+  {
+    path: '/login',
+    element: <LoginPage />,
+    // errorElement: <Navigate to="/login" replace={true} />,
+  },
+  { path: '/register', element: <RegisterPage /> },
+  {
+    path: '/',
+    element: (
+      <PrivateRoute>
+        <DrawerProvider>
+          <MainLayout />
+        </DrawerProvider>
+      </PrivateRoute>
+    ),
+    errorElement: <NotFoundPage />,
+    children: [
+      { path: 'dashboard', element: <DashboardPage /> },
+      { path: 'profile', element: <ProfilePage /> },
+      {
+        path: 'cadastro',
+        children: [
+          { path: 'usuario', element: <CadastroUsuarioList /> },
+          { path: 'usuario/:id', element: <CadastroUsuarioForm /> },
+        ],
+      },
+    ],
+  },
+]);
+
+export const menus: IDrawerOptionListItem[] = [
+  {
+    icon: 'dashboard',
+    label: 'Dashboard',
+    path: '/dashboard',
+  },
+  {
+    icon: 'drafts',
+    label: 'Cadastro',
+    children: [
+      {
+        icon: 'star',
+        label: 'Usuario',
+        path: '/cadastro/usuario',
+      },
+    ],
+  },
+];
