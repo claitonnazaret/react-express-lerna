@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "npx vite",
+    "start": "copy .env.dev .env && npx vite",
     "build": "tsc && npx vite build",
     "preview": "npx vite preview",
     "lint": "eslint --ext .tsx,.ts --fix ./src -c .eslintrc",
