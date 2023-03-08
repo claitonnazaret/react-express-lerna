@@ -3,7 +3,6 @@ import { Avatar, Grid, Link, Typography, InputAdornment, IconButton, Button } fr
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { FormInput } from '../shared/components';
 import { useAuth, useLoading } from '../shared/contexts/hooks';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
@@ -12,6 +11,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { Box } from '@mui/system';
 import _ from 'lodash';
+import { TextFieldElement } from 'react-hook-form-mui';
+import { REQUIRED_FIELD } from '../shared/utils';
 
 export const Copyright = (props: any) => {
   return (
@@ -27,9 +28,12 @@ export const Copyright = (props: any) => {
 };
 
 const registerSchema = object({
-  email: string().nonempty('Email é obrigatório').email('Email inválido'),
-  password: string()
-    .nonempty('Senha é obrigatório')
+  email: string({
+    required_error: REQUIRED_FIELD,
+  }).email('Email inválido'),
+  password: string({
+    required_error: REQUIRED_FIELD,
+  })
     .min(8, 'Senha deve conter mais de 8 caracteres')
     .max(32, 'Senha deve conter no máximo 32 caracteress'),
 });
@@ -106,7 +110,7 @@ export const LoginPage = () => {
         </Typography>
         <FormProvider {...methods}>
           <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit(onSubmitHandler)}>
-            <FormInput
+            <TextFieldElement
               margin="normal"
               required
               fullWidth
@@ -116,7 +120,7 @@ export const LoginPage = () => {
               autoComplete="off"
               autoFocus
             />
-            <FormInput
+            <TextFieldElement
               margin="normal"
               required
               fullWidth

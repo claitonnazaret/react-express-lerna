@@ -8,38 +8,50 @@ import { object, string, TypeOf, number, any } from 'zod';
 import { Box } from '@mui/system';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AvatarUpload, FormInput, FormMaskInput, IArquivo } from '../shared/components';
+import { AvatarUpload, IArquivo } from '../shared/components';
 import { Grid, Stack } from '@mui/material';
+import { isValidCPF, REQUIRED_FIELD } from '../shared/utils';
+import { TextFieldElement } from 'react-hook-form-mui';
+import InputMask from 'react-input-mask';
+import { cpf, cnpj } from 'cpf-cnpj-validator';
 
 const registerSchema = object({
+  nome: string({
+    required_error: REQUIRED_FIELD,
+  }),
+  sobreNome: string({
+    required_error: REQUIRED_FIELD,
+  }),
+  documento: string({
+    required_error: REQUIRED_FIELD,
+  }).refine((val) => cpf.isValid(val), 'Digite um documento válido'),
   id: number(),
-  nome: string().nonempty('Nome é obrigatório').nullable(),
-  sobreNome: string().nonempty('Sobrenome é obrigatório').nullable(),
-  documento: string().nonempty('CPF/CNPJ é obrigatório').nullable(),
-  file: any().nullable(),
+  file: any().optional(),
 });
 
 type RegisterInput = TypeOf<typeof registerSchema>;
 
 export const ProfilePage = () => {
-  const { id } = useAuth();
+  const { id: userId } = useAuth();
   const { loading } = useLoading();
   const { enqueueSnackbar } = useSnackbar();
   const { setActions } = useAppForm();
   const { setTitulo } = useAppBar();
   const { appInfo, setAppInfo } = useDrawer();
-
-  const [data, setData] = useState<RegisterInput>({} as RegisterInput);
   const [arquivo, setArquivo] = useState<IArquivo>({ file: null, preview: '' });
+
+  const methods = useForm<RegisterInput>({
+    resolver: zodResolver(registerSchema),
+  });
+
+  const { reset, handleSubmit } = methods;
 
   const onSubmitHandler: SubmitHandler<RegisterInput> = async (values) => {
     const { id } = values;
-    console.log(values);
-
     loading(true);
     await ProfileService.save(id, values)
       .then((res) => {
-        setData(res.data);
+        reset(res.data);
         setArquivo({
           ...arquivo,
           preview: res.data?.avatar,
@@ -56,11 +68,10 @@ export const ProfilePage = () => {
   useEffect(() => {
     setTitulo('Profile');
     setActions([{ icon: 'save', label: 'Salvar', handle: handleSubmit(onSubmitHandler) }]);
-
     loading(true);
-    ProfileService.findOne(id ?? 0)
+    ProfileService.findOne(userId ?? 0)
       .then((res) => {
-        setData(res.data);
+        reset(res.data);
         setArquivo({
           ...arquivo,
           preview: res.data?.avatar,
@@ -72,20 +83,11 @@ export const ProfilePage = () => {
       .finally(() => loading(false));
   }, []);
 
-  const methods = useForm<RegisterInput>({
-    resolver: zodResolver(registerSchema),
-    values: data,
-  });
-
-  const {
-    reset,
-    handleSubmit,
-    register,
-    formState: { isSubmitSuccessful, errors },
-  } = methods;
-
   useEffect(() => {
-    setData({ ...data, file: arquivo?.file });
+    reset((prevState) => ({
+      ...prevState,
+      file: arquivo?.file,
+    }));
   }, [arquivo]);
 
   return (
@@ -107,38 +109,40 @@ export const ProfilePage = () => {
         </Stack>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
-            <FormMaskInput
-              margin="normal"
-              required
-              fullWidth
-              id="documento"
+            <TextFieldElement
               label="Documento"
               name="documento"
-              autoComplete="off"
-              mask="###.###.###-##"
+              margin="normal"
+              size="small"
+              fullWidth
+              required
+              InputProps={{
+                inputComponent: (props) => (
+                  <InputMask {...props} mask="999.999.999-99" maskChar=" " maskPlaceholder="" />
+                ),
+              }}
             />
           </Grid>
           <Grid item xs={12} md={4}>
-            <FormInput
-              margin="normal"
-              required
-              fullWidth
-              id="nome"
+            <TextFieldElement
               label="Nome"
               name="nome"
+              margin="normal"
               autoComplete="off"
-              autoFocus
+              size="small"
+              fullWidth
+              required
             />
           </Grid>
           <Grid item xs={12} md={4}>
-            <FormInput
-              margin="normal"
-              required
-              fullWidth
-              id="sobreNome"
+            <TextFieldElement
               label="Sobrenome"
               name="sobreNome"
+              margin="normal"
               autoComplete="off"
+              size="small"
+              fullWidth
+              required
             />
           </Grid>
         </Grid>
