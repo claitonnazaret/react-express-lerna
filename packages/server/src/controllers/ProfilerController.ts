@@ -25,15 +25,13 @@ export default {
         return res.status(404).send('Data Not found');
       }
 
-      Helper.deleteFile(profile.arquivo, 'avatar');
-
       profile.nome = nome;
       profile.sobreNome = sobreNome;
       profile.documento = documento;
-      profile.avatar = '';
-      profile.arquivo = '';
 
       if (file) {
+        Helper.deleteFile(profile.arquivo, 'avatar');
+
         const { key, location: url = '' } = file;
         profile.avatar =
           STORAGE_TYPE === 's3' ? url : `${BASE_URL}/avatar/${key}`;

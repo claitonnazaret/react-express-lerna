@@ -21,6 +21,7 @@
     "@typescript-eslint/restrict-template-expressions": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-invalid-void-type": "off",
     "react/prop-types": "off",
     "array-callback-return": "off",
     "react/react-in-jsx-scope": "off",

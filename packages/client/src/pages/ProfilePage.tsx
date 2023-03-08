@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useAppBar, useAuth, useLoading } from '../shared/contexts/hooks';
+import { useAppBar, useAuth, useDrawer, useLoading } from '../shared/contexts/hooks';
 import { ProfileService } from '../shared/services';
 import { useSnackbar } from 'notistack';
 import { AxiosError } from 'axios';
@@ -27,6 +27,7 @@ export const ProfilePage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const { setActions } = useAppForm();
   const { setTitulo } = useAppBar();
+  const { appInfo, setAppInfo } = useDrawer();
 
   const [data, setData] = useState<RegisterInput>({} as RegisterInput);
   const [arquivo, setArquivo] = useState<IArquivo>({ file: null, preview: '' });
@@ -43,6 +44,7 @@ export const ProfilePage = () => {
           ...arquivo,
           preview: res.data?.avatar,
         });
+        setAppInfo({ ...appInfo, iconProfile: res.data?.avatar });
         enqueueSnackbar('Profile Salvo com sucesso!', { variant: 'success' });
       })
       .catch((err: AxiosError) => {

@@ -55,7 +55,10 @@ export default {
         return res.status(401).send('Unauthorized');
       }
 
-      const matched = await PasswordHelper.PasswordCompare(password, user.password);
+      const matched = await PasswordHelper.PasswordCompare(
+        password,
+        user.password
+      );
       if (!matched) {
         return res.status(401).send('Unauthorized');
       }
@@ -86,12 +89,20 @@ export default {
         maxAge: 24 * 60 * 60 * 1000,
       });
 
+      const profile = await Profile.findOne({
+        attributes: ['avatar'],
+        where: {
+          userId: user.roleId,
+        },
+      });
+
       const responseUser = {
         id: user.id,
         email: user.email,
         role: role?.roleName,
         verified: user.verified,
         active: user.active,
+        avatar: profile?.avatar,
         accessToken,
       };
 
