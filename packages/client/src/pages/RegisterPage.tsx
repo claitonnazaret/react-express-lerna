@@ -4,7 +4,6 @@ import { Box } from '@mui/system';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { FormInput, FormRadioGroup } from '../shared/components';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { useAuth, useLoading } from '../shared/contexts/hooks';
 import { useNavigate } from 'react-router-dom';
@@ -13,19 +12,29 @@ import { useSnackbar } from 'notistack';
 import { object, string, TypeOf } from 'zod';
 import _ from 'lodash';
 import { Copyright } from './LoginPage';
+import { RadioButtonGroup, TextFieldElement } from 'react-hook-form-mui';
+import { REQUIRED_FIELD } from '../shared/utils';
 
 const registerSchema = object({
-  name: string().nonempty('Nome é obrigatório'),
-  email: string().nonempty('Email é obrigatório').email('Email inválido'),
-  password: string()
-    .nonempty('Senha é obrigatório')
+  name: string({
+    required_error: REQUIRED_FIELD,
+  }),
+  email: string({
+    required_error: REQUIRED_FIELD,
+  }).email('Email inválido'),
+  password: string({
+    required_error: REQUIRED_FIELD,
+  })
     .min(8, 'Senha deve conter mais de 8 caracteres')
     .max(32, 'Senha deve conter no máximo 32 caracteress'),
-  confirmPassword: string()
-    .nonempty('Você deve confirmar a senha')
+  confirmPassword: string({
+    required_error: 'Você deve confirmar a senha',
+  })
     .min(8, 'Senha deve conter mais de 8 caracteres')
     .max(32, 'Senha deve conter no máximo 32 caracteress'),
-  roleId: string().nonempty('Você deve informar o Tipo de cadastro'),
+  roleId: string({
+    required_error: REQUIRED_FIELD,
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   path: ['confirmPassword'],
   message: 'As senhas não coincidem',
@@ -79,7 +88,7 @@ export const RegisterPage = () => {
         navigate('/login');
       })
       .catch((err: AxiosError) => {
-        const message = err.response?.status == 401 ? 'Email / Senha inválido!' : err.message;
+        const message = err.response?.status === 401 ? 'Email / Senha inválido!' : err.message;
         enqueueSnackbar(message, { variant: 'error' });
       })
       .finally(() => loading(false));
@@ -114,7 +123,7 @@ export const RegisterPage = () => {
         </Typography>
         <FormProvider {...methods}>
           <Box component="form" noValidate sx={{ mt: 1 }} onSubmit={handleSubmit(onSubmitHandler)}>
-            <FormInput
+            <TextFieldElement
               margin="normal"
               required
               fullWidth
@@ -124,7 +133,7 @@ export const RegisterPage = () => {
               autoComplete="off"
               autoFocus
             />
-            <FormInput
+            <TextFieldElement
               margin="normal"
               required
               fullWidth
@@ -134,7 +143,7 @@ export const RegisterPage = () => {
               type="email"
               autoComplete="off"
             />
-            <FormInput
+            <TextFieldElement
               margin="normal"
               required
               fullWidth
@@ -158,7 +167,7 @@ export const RegisterPage = () => {
                 ),
               }}
             />
-            <FormInput
+            <TextFieldElement
               margin="normal"
               required
               fullWidth
@@ -183,7 +192,7 @@ export const RegisterPage = () => {
               }}
             />
 
-            <FormRadioGroup
+            <RadioButtonGroup
               row
               type="number"
               name="roleId"
