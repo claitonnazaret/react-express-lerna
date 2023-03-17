@@ -31,6 +31,7 @@
     "react-input-mask": "^3.0.0-alpha.2",
     "react-router-dom": "^6.8.1",
     "react-uuid": "^2.0.0",
+    "ts-remask": "^0.2.0",
     "zod": "^3.20.6"
   },
   "devDependencies": {
