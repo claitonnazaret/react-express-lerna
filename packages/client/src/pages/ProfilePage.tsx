@@ -8,12 +8,12 @@ import { object, string, TypeOf, number, any } from 'zod';
 import { Box } from '@mui/system';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AvatarUpload, IArquivo, TextFieldCpfCnpj } from '../shared/components';
+import { AvatarUpload, IArquivo, TextFieldMask } from '../shared/components';
 import { Grid, Stack } from '@mui/material';
 import { REQUIRED_FIELD } from '../shared/utils';
 import { TextFieldElement } from 'react-hook-form-mui';
-import InputMask from 'react-input-mask';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
+import { unMask } from 'ts-remask';
 
 const registerSchema = object({
   nome: string({
@@ -24,7 +24,10 @@ const registerSchema = object({
   }),
   documento: string({
     required_error: REQUIRED_FIELD,
-  }).refine((val) => cpf.isValid(val), 'Digite um documento válido'),
+  }).refine(
+    (val) => (unMask(val).length > 11 ? cnpj.isValid(val) : cpf.isValid(val)),
+    (val) => ({ message: `${unMask(val).length > 11 ? 'CNPJ' : 'CPF'} inválido` })
+  ),
   id: number(),
   file: any().optional(),
 });
@@ -44,7 +47,7 @@ export const ProfilePage = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const { reset, handleSubmit, getValues } = methods;
+  const { reset, handleSubmit, setValue } = methods;
 
   const onSubmitHandler: SubmitHandler<RegisterInput> = async (values) => {
     const { id } = values;
@@ -109,11 +112,13 @@ export const ProfilePage = () => {
         </Stack>
         <Grid container spacing={1} columns={{ xs: 4, sm: 8, md: 12 }}>
           <Grid item xs={12} sm={12} md={4}>
-            <TextFieldCpfCnpj
-              label="Documento"
+            <TextFieldMask
+              label="CPF / CNPJ"
               name="documento"
               margin="normal"
               size="small"
+              setValue={setValue}
+              masks={['999.999.999-99', '99.999.999/9999-99']}
               fullWidth
               required
             />

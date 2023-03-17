@@ -1,2 +1,2 @@
 export * from './upload/AvatarUpload';
-export * from './TextFieldCpfCnpj';
+export * from './TextFieldMask';
