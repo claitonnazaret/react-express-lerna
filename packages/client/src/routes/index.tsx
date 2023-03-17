@@ -1,13 +1,13 @@
 import { FC } from 'react';
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
 import {
-  LoginPage,
-  RegisterPage,
+  CadastroUsuarioForm,
+  CadastroUsuarioList,
   DashboardPage,
+  LoginPage,
   NotFoundPage,
   ProfilePage,
-  CadastroUsuarioList,
-  CadastroUsuarioForm,
+  RegisterPage,
 } from '../pages';
 import { DrawerProvider, IDrawerOptionListItem } from '../shared/contexts';
 import { useAuth } from '../shared/contexts/hooks';

@@ -8,9 +8,9 @@ import { object, string, TypeOf, number, any } from 'zod';
 import { Box } from '@mui/system';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AvatarUpload, IArquivo } from '../shared/components';
+import { AvatarUpload, IArquivo, TextFieldCpfCnpj } from '../shared/components';
 import { Grid, Stack } from '@mui/material';
-import { isValidCPF, REQUIRED_FIELD } from '../shared/utils';
+import { REQUIRED_FIELD } from '../shared/utils';
 import { TextFieldElement } from 'react-hook-form-mui';
 import InputMask from 'react-input-mask';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
@@ -44,7 +44,7 @@ export const ProfilePage = () => {
     resolver: zodResolver(registerSchema),
   });
 
-  const { reset, handleSubmit } = methods;
+  const { reset, handleSubmit, getValues } = methods;
 
   const onSubmitHandler: SubmitHandler<RegisterInput> = async (values) => {
     const { id } = values;
@@ -107,23 +107,18 @@ export const ProfilePage = () => {
             setArquivo={setArquivo}
           />
         </Stack>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={4}>
-            <TextFieldElement
+        <Grid container spacing={1} columns={{ xs: 4, sm: 8, md: 12 }}>
+          <Grid item xs={12} sm={12} md={4}>
+            <TextFieldCpfCnpj
               label="Documento"
               name="documento"
               margin="normal"
               size="small"
               fullWidth
               required
-              InputProps={{
-                inputComponent: (props) => (
-                  <InputMask {...props} mask="999.999.999-99" maskChar=" " maskPlaceholder="" />
-                ),
-              }}
             />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={12} md={4}>
             <TextFieldElement
               label="Nome"
               name="nome"
@@ -134,7 +129,7 @@ export const ProfilePage = () => {
               required
             />
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} sm={12} md={4}>
             <TextFieldElement
               label="Sobrenome"
               name="sobreNome"
