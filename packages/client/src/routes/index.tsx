@@ -12,6 +12,8 @@ import {
 import { DrawerProvider, IDrawerOptionListItem } from '../shared/contexts';
 import { useAuth } from '../shared/contexts/hooks';
 import { MainLayout } from '../shared/layouts';
+import jwtDecode from 'jwt-decode';
+import { StorageService } from '../shared/services';
 
 // Private Route
 interface IPrivateRoute {
@@ -19,9 +21,9 @@ interface IPrivateRoute {
 }
 
 const PrivateRoute: FC<IPrivateRoute> = ({ children }) => {
-  const { accessToken } = useAuth();
+  const { accessToken, refreshToken } = useAuth();
 
-  if (!accessToken) {
+  if (!accessToken && !refreshToken) {
     return <LoginPage />;
   }
 

@@ -17,6 +17,7 @@ export interface IUser {
   role?: string;
   avatar?: string;
   accessToken?: string;
+  refreshToken?: string;
 }
 
 export interface IContext extends IUser {

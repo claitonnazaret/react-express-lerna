@@ -104,6 +104,7 @@ export default {
         active: user.active,
         avatar: profile?.avatar,
         accessToken,
+        refreshToken,
       };
 
       return res.status(200).send(responseUser);
@@ -139,6 +140,7 @@ export default {
         verified: decodedUser.verified,
         active: decodedUser.active,
         accessToken,
+        refreshToken,
       };
 
       return res.status(200).send(resultUser);

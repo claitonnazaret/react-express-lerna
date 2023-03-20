@@ -1,7 +1,6 @@
 import axios, { AxiosError } from 'axios';
-import _ from 'lodash';
-import { IUser } from '../types';
 import { StorageService } from './StorageService';
+import { Navigate } from 'react-router-dom';
 
 const { VITE_SERVER_URL } = import.meta.env;
 
@@ -24,13 +23,13 @@ const ApiService = axios.create({
 });
 
 ApiService.interceptors.request.use(
-  async (config) => {
+  async (req) => {
     const ls = StorageService.getUser();
     if (ls?.accessToken) {
-      config.headers.Authorization = `Bearer ${ls?.accessToken}`;
+      req.headers.Authorization = `Bearer ${ls?.accessToken}`;
     }
     // Faz alguma coisa antes da requisição ser enviada
-    return config;
+    return req;
   },
   async (error) => {
     return await Promise.reject(HandleError(error));
@@ -55,6 +54,7 @@ ApiService.interceptors.response.use(
         return await ApiService(config);
       } catch (err) {
         StorageService.removeUser();
+        window.location.href = '/';
         return await Promise.reject(HandleError(err));
       }
     }
